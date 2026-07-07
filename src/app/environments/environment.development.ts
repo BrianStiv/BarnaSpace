@@ -2,7 +2,7 @@ export const environment = {
   production: false,
 
   firebaseConfig: {
-    apiKey: "AIzaSyC9Ny0OJUaincX7FCex83gaRuEdhS5xhXg",
+    apiKey: "kjljljlk",
     authDomain: "barnaspace-88e9d.firebaseapp.com",
     projectId: "barnaspace-88e9d",
     storageBucket: "barnaspace-88e9d.firebasestorage.app",
@@ -11,10 +11,11 @@ export const environment = {
   },
 
   googleMaps:{
-
+    apiKey: "fkjslkfskfjlsf"
   },
 
   genkit: {
-
+  baseUrl: 'http://localhost:5000/',
+    apiKey: "dskdjalksdjlad"
   }
 };
