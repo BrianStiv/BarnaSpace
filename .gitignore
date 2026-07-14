@@ -45,3 +45,6 @@ Thumbs.db
 
 # environments
 src/environment/environment.ts
+
+# docs
+/docs/
