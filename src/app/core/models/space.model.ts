@@ -14,7 +14,9 @@ export interface SpaceModel {
   capacity: number;
   categories: SpaceCategory[];
   amenities: Amenity[];
+  blockedDates: string[];  // ['2026-07-20', '2026-07-21']
   images: string[];
   hostId: string;
   publicationStatus: 'pending_approval' | 'published' | 'rejected' | 'deactivated';
+
 }
