@@ -1,1 +1,13 @@
-<p>empty-state works!</p>
+<div class="flex flex-col items-center justify-center text-center p-8">
+  <mat-icon class="text-6xl text-medium mb-4">
+    {{ icon() }}
+  </mat-icon>
+
+  <h2 class="text-xl font-semibold text-dark mb-2">
+    {{ title() }}
+  </h2>
+
+  <p class="text-medium max-w-xs">
+    {{ message() }}
+  </p>
+</div>
