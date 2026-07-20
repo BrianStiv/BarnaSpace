@@ -51,7 +51,16 @@ export class AuthService {
       );
     }),
   );
+
   async login(email: string, password: string): Promise<void> {
     await signInWithEmailAndPassword(this.auth, email, password);
   }
+
+  async register(email: string, password: string, name: string): Promise<void> {
+    const credential = await createUserWithEmailAndPassword(this.auth, email, password);
+    await updateProfile(credential.user, { displayName: name });
+    await this.createUserDocument(credential.user.uid, email, name);
+  }
+
+  
 }
