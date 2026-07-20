@@ -1,1 +1,20 @@
-<p>login-form works!</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" formControlName="email" placeholder="tu@email.com" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Contraseña</mat-label>
+    <input matInput type="password" formControlName="password" placeholder="******" />
+  </mat-form-field>
+
+  <button
+    mat-flat-button
+    type="submit"
+    class="w-full !bg-terracota !text-white py-3 rounded-full text-lg font-semibold"
+    [disabled]="form.invalid"
+  >
+    Iniciar sesión
+  </button>
+</form>
