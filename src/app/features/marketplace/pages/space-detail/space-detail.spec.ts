@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HomePageComponent } from './home-page-component';
+import { SpaceDetail } from './space-detail';
 
-describe('HomePageComponent', () => {
-  let component: HomePageComponent;
-  let fixture: ComponentFixture<HomePageComponent>;
+describe('SpaceDetail', () => {
+  let component: SpaceDetail;
+  let fixture: ComponentFixture<SpaceDetail>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomePageComponent],
+      imports: [SpaceDetail],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HomePageComponent);
+    fixture = TestBed.createComponent(SpaceDetail);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
