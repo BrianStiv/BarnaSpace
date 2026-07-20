@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-cream">
   @if (space$ | async; as space) {
     <div class="relative">
-      <!-- Imagen principal -->
+
       <div class="relative aspect-[16/9] max-h-[400px] overflow-hidden">
         <img
           [src]="space.images[0] || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1200&q=80'"
@@ -24,7 +24,6 @@
         </button>
       </div>
 
-      <!-- Contenido -->
       <div class="px-4 py-6 max-w-3xl mx-auto">
         <h1 class="text-3xl font-bold text-dark mb-2">{{ space.name }}</h1>
         <p class="text-medium text-lg mb-4">{{ space.location.neighborhood }}</p>
@@ -44,7 +43,6 @@
           </span>
         </div>
 
-        <!-- Amenities -->
         <div class="flex flex-wrap gap-2 mb-6">
           @for (amenity of space.amenities; track amenity) {
             <span class="px-3 py-1 rounded-full bg-forest/10 text-forest text-sm">
@@ -53,13 +51,11 @@
           }
         </div>
 
-        <!-- Descripción -->
         <div class="mb-6">
           <h2 class="text-xl font-semibold text-dark mb-2">Descripción</h2>
           <p class="text-medium leading-relaxed">{{ space.description }}</p>
         </div>
 
-        <!-- Seguro -->
         @if (space.hasDamageInsurance) {
           <div class="mb-6 p-4 bg-mustard/10 rounded-lg">
             <p class="text-dark font-medium">
@@ -70,7 +66,6 @@
       </div>
     </div>
 
-    <!-- Botón fijo reservar -->
     <div class="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-light">
       <button
         mat-flat-button
