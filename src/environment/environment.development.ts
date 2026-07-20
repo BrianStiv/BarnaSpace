@@ -17,6 +17,6 @@ export const environment = {
     baseUrl: 'http://localhost:5000/',
     apiKey: "dskdjalksdjlad"
   },
-   stripePublicKey: 'pk_test_51TqqzEDbPO1Py7MUy4Wmcm0ilSBPUdw0iPZohdfDHU3veKlEbGEnhcT35IfZd1mTZBgMAPnqVoMho53qWfKPkaBQ00O4BEodWs'
-  
+   stripePublicKey: 'pk_test_51TqqzEDbPO1Py7MUy4Wmcm0ilSBPUdw0iPZohdfDHU3veKlEbGEnhcT35IfZd1mTZBgMAPnqVoMho53qWfKPkaBQ00O4BEodWs',
+  adminEmail: 'admin@barnaspaces.com',
 };

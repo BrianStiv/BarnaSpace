@@ -14,7 +14,7 @@ import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
-import { environment } from '../../../environment/environment';
+import { environment } from '../../../../environment/environment';
 
 @Injectable({
   providedIn: 'root',
