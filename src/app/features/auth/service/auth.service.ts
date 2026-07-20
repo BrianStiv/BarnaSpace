@@ -72,7 +72,27 @@ export class AuthService {
     );
   }
 
-  
+  async logout(): Promise<void> {
+    await signOut(this.auth);
+  }
 
+  isAdmin(email: string): boolean {
+    return email === environment.adminEmail;
+  }
 
+  private async createUserDocument(uid: string, email: string, name: string): Promise<void> {
+    const userRef = doc(this.firestore, 'users', uid);
+
+    const userDoc: Partial<User> = {
+      uid,
+      email,
+      name,
+      roles: this.isAdmin(email) ? ['admin'] : ['client'],
+      hostStatus: 'not_applicable',
+      favorites: [],
+      createdAt: new Date(),
+    };
+
+    await setDoc(userRef, userDoc);
+  }
 }
