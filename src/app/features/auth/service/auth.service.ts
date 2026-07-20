@@ -62,5 +62,17 @@ export class AuthService {
     await this.createUserDocument(credential.user.uid, email, name);
   }
 
+  async loginWithGoogle(): Promise<void> {
+    const provider = new GoogleAuthProvider();
+    const credential = await signInWithPopup(this.auth, provider);
+    await this.createUserDocument(
+      credential.user.uid,
+      credential.user.email ?? '',
+      credential.user.displayName ?? '',
+    );
+  }
+
   
+
+
 }
