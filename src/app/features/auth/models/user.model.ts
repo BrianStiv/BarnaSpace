@@ -1,3 +1,5 @@
+import { HostData } from './host-data.model';
+
 export interface User {
   uid: string;
   email: string;
