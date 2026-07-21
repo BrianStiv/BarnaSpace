@@ -2,12 +2,11 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { LoginForm } from '../../../components/login-form/login-form';
-import { AuthService } from '../../../service/auth.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
-  selector: 'app-login.page',
-  imports: [CommonModule, LoginForm, MatButtonModule],
+  selector: 'app-login',
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './login.page.html',
 })
 export class LoginPage {
@@ -23,7 +22,14 @@ export class LoginPage {
     }
   }
 
-
-
+  async onGoogleLogin() {
+    try{
+      await this.authService.loginWithGoogle();
+      this.router.navigate(['/marketplace']);
+    } catch (error) {
+      console.log(error);
+      console.error('Google Login error:', error);
+    }
+  }
 
 }
