@@ -1,1 +1,24 @@
-<p>login.page works!</p>
+<div class="min-h-screen bg-cream px-4 py-8">
+  <div class="max-w-md mx-auto">
+    <h1 class="text-3xl font-bold text-dark mb-6">Iniciar sesión</h1>
+
+    <app-login-form
+      (login)="onLogin($event)"
+    />
+
+    <div class="my-4 text-center text-medium">o</div>
+    <button
+      type="button"
+      class="w-full flex items-center justify-center gap-2 bg-white border border-light rounded-full py-3 font-medium text-dark"
+      (click)="onGoogleLogin()"
+    >
+      <mat-icon>account_circle</mat-icon>
+      Continuar con Google
+    </button>
+
+    <p class="text-center mt-6 text-medium">
+      ¿No tienes cuenta?
+      <a routerLink="/auth/register" class="text-terracota font-medium">Regístrate</a>
+    </p>
+  </div>
+</div>

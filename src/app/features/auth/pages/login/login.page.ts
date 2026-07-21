@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
+import { MatIconModule} from '@angular/material/icon';
+import { LoginForm } from '../../components/login-form/login-form';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule,MatIconModule, MatButtonModule,LoginForm],
   templateUrl: './login.page.html',
 })
 export class LoginPage {
