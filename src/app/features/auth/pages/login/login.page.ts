@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { MatIconModule} from '@angular/material/icon';
 import { LoginForm } from '../../components/login-form/login-form';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule,MatIconModule, MatButtonModule,LoginForm],
+  imports: [CommonModule,MatIconModule, MatButtonModule,LoginForm,RouterLink],
   templateUrl: './login.page.html',
 })
 export class LoginPage {

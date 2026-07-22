@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login-form',
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule,],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
   templateUrl: './login-form.html',
 })
 export class LoginForm {
