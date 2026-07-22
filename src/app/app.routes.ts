@@ -1,10 +1,25 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './home-page-component/home-page-component';
 import { NotFoundPage } from './not-found-page/not-found-page';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomePageComponent },
-  { path: '404', component: NotFoundPage },
-  { path: '**', redirectTo: '/home'}
+  {
+    path: '',
+    redirectTo: '/marketplace',
+    pathMatch: 'full' },
+  {
+    path: 'marketplace',
+    loadChildren: () => import('./features/marketplace/marketplace.routes').then((m) => m.marketplaceRoutes),
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes),
+  },
+  {
+    path: '404',
+    component: NotFoundPage
+  },
+  {
+    path: '**',
+    redirectTo: '/marketplace'
+  },
 ];
