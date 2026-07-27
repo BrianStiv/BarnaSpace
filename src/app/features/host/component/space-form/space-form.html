@@ -1,0 +1,73 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Nombre del espacio</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput formControlName="description" rows="3"></textarea>
+  </mat-form-field>
+
+  <div class="grid grid-cols-3 gap-4">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Precio/día (€)</mat-label>
+      <input matInput type="number" formControlName="dailyPrice" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Aforo</mat-label>
+      <input matInput type="number" formControlName="capacity" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Metros cuadrados</mat-label>
+      <input matInput type="number" formControlName="squareMeters" />
+    </mat-form-field>
+
+  </div>
+
+  <app-address-input [address]="form.value.address" (addressChange)="form.patchValue({ address: $event })" />
+
+  <div>
+    <p class="text-sm text-medium mb-2">Categorías</p>
+    <div class="flex flex-wrap gap-2">
+      @for (category of categories; track category) {
+      <button type="button" (click)="toggleCategory(category)"
+        class="px-3 py-1 rounded-full text-sm border-2 transition-colors"
+        [class.border-terracota]="isSelected(category, 'categories')"
+        [class.bg-terracota]="isSelected(category, 'categories')"
+        [class.text-white]="isSelected(category, 'categories')"
+        [class.border-light]="!isSelected(category, 'categories')">
+        {{ category }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <div>
+    <p class="text-sm text-medium mb-2">Amenities</p>
+    <div class="flex flex-wrap gap-2">
+      @for (amenity of amenities; track amenity) {
+      <button type="button" (click)="toggleAmenity(amenity)"
+        class="px-3 py-1 rounded-full text-sm border-2 transition-colors"
+        [class.border-forest]="isSelected(amenity, 'amenities')" [class.bg-forest]="isSelected(amenity, 'amenities')"
+        [class.text-white]="isSelected(amenity, 'amenities')" [class.border-light]="!isSelected(amenity, 'amenities')">
+        {{ amenity }}
+      </button>
+      }
+    </div>
+  </div>
+
+  <app-image-url-input [images]="form.value.images" (imagesChange)="form.patchValue({ images: $event })" />
+
+  <div class="flex gap-3 pt-4">
+    <button type="button" mat-stroked-button class="flex-1" (click)="cancel.emit()">
+      Cancelar
+    </button>
+
+    <button type="submit" mat-flat-button class="flex-1 !bg-terracota !text-white" [disabled]="form.invalid">
+      {{ submitLabel() }}
+    </button>
+  </div>
+</form>

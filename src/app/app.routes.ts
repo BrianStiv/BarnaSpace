@@ -14,6 +14,10 @@ export const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes),
   },
+    {
+    path: 'host',
+    loadChildren: () => import('./features/host/host.routes').then((m) => m.hostRoutes),
+  },
   {
     path: '404',
     component: NotFoundPage
