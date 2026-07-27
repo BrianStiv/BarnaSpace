@@ -1,0 +1,79 @@
+<div class="min-h-screen bg-cream px-4 py-8">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold text-dark mb-6">Ser anfitrión</h1>
+
+    <div class="flex items-center gap-2 mb-6">
+      @for (step of ['Datos personales', 'Datos fiscales', 'Tu espacio']; track $index) {
+        <div
+          class="px-3 py-1 rounded-full text-sm font-medium"
+          [class.bg-terracota]="currentStep >= $index"
+          [class.text-white]="currentStep >= $index"
+          [class.bg-light]="currentStep < $index"
+          [class.text-medium]="currentStep < $index"
+        >
+          {{ $index + 1 }}
+        </div>
+      }
+    </div>
+
+    @switch (currentStep) {
+      @case (0) {
+        <form [formGroup]="personalForm" class="space-y-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nombre completo</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+        </form>
+      }
+
+      @case (1) {
+        <form [formGroup]="fiscalForm" class="space-y-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nombre fiscal</mat-label>
+            <input matInput formControlName="fiscalName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>NIF / CIF</mat-label>
+            <input matInput formControlName="nif" />
+          </mat-form-field>
+        </form>
+      }
+
+      @case (2) {
+        <app-space-form
+          submitLabel="Enviar solicitud"
+          (submit)="onSpaceSubmit($event)"
+          (cancel)="onCancel()"
+        />
+      }
+    }
+
+    @if (currentStep < 2) {
+      <div class="flex justify-between mt-6">
+        <button
+          type="button"
+          mat-stroked-button
+          (click)="previousStep()"
+          [disabled]="currentStep === 0"
+        >
+          Anterior
+        </button>
+
+        <button
+          type="button"
+          mat-flat-button
+          class="!bg-terracota !text-white"
+          (click)="nextStep()"
+        >
+          Siguiente
+        </button>
+      </div>
+    }
+  </div>
+</div>
