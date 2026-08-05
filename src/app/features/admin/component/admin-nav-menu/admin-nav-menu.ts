@@ -24,6 +24,7 @@ export class AdminNavMenu {
 
   adminLinks: NavLink[] = [
     { icon: 'dashboard', label: 'Dashboard', path: '/admin/dashboard' },
+    { icon: 'people', label: 'Usuarios', path: '/admin/users' },
   ];
 
   toggle() {
