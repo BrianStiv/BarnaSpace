@@ -1,0 +1,32 @@
+<div class="relative">
+  <button mat-icon-button (click)="toggle()" aria-label="Menú de administración">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  @if (navOpen()) {
+    <div class="fixed inset-0 z-40" (click)="close()"></div>
+
+    <div class="absolute right-0 top-12 z-50 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 py-2">
+      @for (item of adminLinks; track item.path) {
+        <a [routerLink]="item.path"
+           routerLinkActive="bg-gray-100"
+           [routerLinkActiveOptions]="{ exact: false }"
+           (click)="close()"
+           class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer text-dark">
+          <mat-icon class="!text-medium">{{ item.icon }}</mat-icon>
+          <span class="text-sm font-medium">{{ item.label }}</span>
+        </a>
+      }
+
+      <mat-divider class="!my-2"></mat-divider>
+
+      <button type="button"
+              (click)="onLogout()"
+              class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer w-full text-left text-dark">
+        <mat-icon class="!text-medium">logout</mat-icon>
+        <span class="text-sm font-medium">Cerrar sesión</span>
+      </button>
+
+    </div>
+  }
+</div>
