@@ -1,0 +1,35 @@
+@if (control(); as ctrl) {
+  @if (field().type === 'textarea') {
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ field().label }}</mat-label>
+      <textarea matInput
+        [formControl]="ctrl"
+        [placeholder]="field().placeholder ?? ''"
+        [required]="field().required ?? false"
+        [attr.maxlength]="field().maxLength"
+        rows="3">
+      </textarea>
+      @if (field().hint) { <mat-hint>{{ field().hint }}</mat-hint> }
+      @if (ctrl.hasError('required')) { <mat-error>Campo requerido</mat-error> }
+      @if (ctrl.hasError('maxlength')) { <mat-error>Máximo {{ field().maxLength }} caracteres</mat-error> }
+    </mat-form-field>
+  } @else {
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>{{ field().label }}</mat-label>
+      <input matInput
+        [type]="field().type"
+        [formControl]="ctrl"
+        [placeholder]="field().placeholder ?? ''"
+        [required]="field().required ?? false"
+        [min]="field().min"
+        [max]="field().max"
+        [pattern]="field().pattern ?? ''">
+      @if (field().hint) { <mat-hint>{{ field().hint }}</mat-hint> }
+      @if (ctrl.hasError('required')) { <mat-error>Campo requerido</mat-error> }
+      @if (ctrl.hasError('min')) { <mat-error>Mínimo {{ field().min }}</mat-error> }
+      @if (ctrl.hasError('max')) { <mat-error>Máximo {{ field().max }}</mat-error> }
+      @if (ctrl.hasError('pattern')) { <mat-error>Formato inválido</mat-error> }
+      @if (ctrl.hasError('maxlength')) { <mat-error>Máximo {{ field().maxLength }} caracteres</mat-error> }
+    </mat-form-field>
+  }
+}
