@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { SpaceModel } from '../../core/models/space.model';
+import { SpaceModel } from '../../../core/models/space.model';
 
 @Component({
   selector: 'app-space-card',

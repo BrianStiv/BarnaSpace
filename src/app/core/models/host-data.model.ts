@@ -1,8 +1,14 @@
 export interface HostData {
+  entityType: 'particular' | 'autonomo' | 'sociedad';
   fiscalName: string;
-  nif: string;
+  documentType: 'NIF' | 'NIE' | 'CIF';
+  documentNumber: string;
+  huttbLicenseNumber: string;
+  cadastralReference: string;    
+  habitabilityCertificate: string;
   address: string;
   city: string;
   zipCode: number;
-  bankAccount?: string;
+  tourismLicenseNumber?: string;
+  bankAccount: string;
 }

@@ -5,7 +5,7 @@ import { MatDividerModule } from '@angular/material/divider';
 
 export interface DetailField {
   label: string;
-  value: string | number | string[] | undefined;
+  value: string | number | string[] | Date | undefined;
   type?: 'text' | 'list' | 'date';
 }
 

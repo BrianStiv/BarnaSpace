@@ -8,13 +8,12 @@ export interface SpaceModel {
   name: string;
   description: string;
   dailyPrice: number;
-  hourlyPrice?: number;
   location: Location;
   squareMeters: number;
   capacity: number;
   categories: SpaceCategory[];
   amenities: Amenity[];
-  blockedDates: string[]; // ['2026-07-20', '2026-07-21']
+  blockedDates: string[];
   images: string[];
   hostId: string;
   publicationStatus: 'pending_approval' | 'published' | 'rejected' | 'deactivated';

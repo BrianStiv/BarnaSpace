@@ -4,13 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
 import { AddressInput } from '../address-input/address-input';
 import { ImageUrlInput } from '../image-url-input/image-url-input';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { SpaceCategory,SPACE_CATEGORIES } from '../../../../core/models/space-category.model';
 import { AMENITIES } from '../../../../core/models/amenity.model';
+import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';
+
 
 @Component({
   selector: 'app-space-form',
@@ -20,10 +20,9 @@ import { AMENITIES } from '../../../../core/models/amenity.model';
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatChipsModule,
-    MatIconModule,
     AddressInput,
     ImageUrlInput,
+    DynamicField,
   ],
   templateUrl: './space-form.html',
 })
@@ -35,6 +34,15 @@ export class SpaceForm {
 
   categories = SPACE_CATEGORIES;
   amenities = AMENITIES;
+
+    simpleFields: DynamicFieldConfig[] = [
+    { name: 'name', label: 'Nombre completo', type: 'text', required: true },
+    { name: 'description', label: 'Descripción', type: 'textarea', required: true },
+    { name: 'dailyPrice', label: 'Precio por día (€)', type: 'number', required: true, min: 1 },
+    { name: 'capacity', label: 'Aforo', type: 'number', required: true, min: 1 },
+    { name: 'squareMeters', label: 'Metros cuadrados', type: 'number', required: true, min: 1 },
+  ];
+
 
   form: FormGroup;
 

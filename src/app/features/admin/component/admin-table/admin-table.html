@@ -10,7 +10,7 @@
           <ng-container [matColumnDef]="$any(column.key)">
             <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
             <td mat-cell *matCellDef="let row" class="cursor-pointer hover:bg-gray-50">
-              {{ row[column.key] }}
+              {{ column.format ? column.format(row) : row[column.key] }}
             </td>
           </ng-container>
         }

@@ -12,7 +12,6 @@ import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
 import { SpaceModel } from '../../../../core/models/space.model';
 
-
 @Component({
   selector: 'app-admin-dashboard',
   imports: [CommonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule, AdminTable, AdminNavMenu],
@@ -39,7 +38,11 @@ export class AdminDashboard {
   });
 
   userColumns: AdminTableColumn<User>[] = [
-    { key: 'name', label: 'Nombre' },
+    {
+      key: 'firstName',
+      label: 'Nombre',
+      format: (u) => `${u.firstName} ${u.lastName}`.trim(),
+    },
     { key: 'email', label: 'Email' },
     { key: 'roles', label: 'Roles' },
   ];
@@ -49,5 +52,4 @@ export class AdminDashboard {
     { key: 'publicationStatus', label: 'Estado' },
     { key: 'dailyPrice', label: 'Precio/día' },
   ];
-
 }

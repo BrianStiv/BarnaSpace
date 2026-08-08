@@ -1,31 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Nombre del espacio</mat-label>
-    <input matInput formControlName="name" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Descripción</mat-label>
-    <textarea matInput formControlName="description" rows="3"></textarea>
-  </mat-form-field>
-
-  <div class="grid grid-cols-3 gap-4">
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Precio/día (€)</mat-label>
-      <input matInput type="number" formControlName="dailyPrice" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Aforo</mat-label>
-      <input matInput type="number" formControlName="capacity" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Metros cuadrados</mat-label>
-      <input matInput type="number" formControlName="squareMeters" />
-    </mat-form-field>
-
-  </div>
+  @for (field of simpleFields; track field.name) {
+  <app-dynamic-field [field]="field" [form]="form" />
+  }
 
   <app-address-input [address]="form.value.address" (addressChange)="form.patchValue({ address: $event })" />
 

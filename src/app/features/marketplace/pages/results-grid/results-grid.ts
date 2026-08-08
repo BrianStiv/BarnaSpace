@@ -5,8 +5,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable, of } from 'rxjs';
 import { SpacesService, SpaceFilters } from '../../../../core/services/spaces.service';
 import { SpaceModel } from '../../../../core/models/space.model';
-import { SpaceCard } from '../../../../shared/space-card/space-card';
-import { EmptyState } from '../../../../shared/empty-state/empty-state';
+import { SpaceCard } from '../../../../shared/components/space-card/space-card';
+import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
