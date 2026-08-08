@@ -13,7 +13,7 @@ import {
 import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { User } from '../../../core/models/user.model';
+import { User, createUserDefaults } from '../../../core/models/user.model';
 import { environment } from '../../../../environment/environment';
 
 @Injectable({
@@ -22,6 +22,7 @@ import { environment } from '../../../../environment/environment';
 export class AuthService {
   private auth = inject(Auth);
   private firestore = inject(Firestore);
+  private defaults = createUserDefaults();
 
   currentUser$: Observable<User | null> = authState(this.auth).pipe(
     switchMap((firebaseUser: FirebaseUser | null) => {
@@ -38,13 +39,15 @@ export class AuthService {
 
           return {
             uid: firebaseUser.uid,
-            email: firebaseUser.email ?? '',
-            name: data.name ?? firebaseUser.displayName ?? '',
+            firstName: data.firstName ?? firebaseUser.displayName ?? '',
+            lastName: data.lastName ?? '',
             phone: data.phone ?? '',
-            roles: data.roles ?? ['client'],
-            hostStatus: data.hostStatus ?? 'not_applicable',
+            email: firebaseUser.email ?? '',
+            roles: data.roles ?? this.defaults.roles,
+            hostStatus: data.hostStatus ?? this.defaults.hostStatus,
             hostData: data.hostData,
-            favorites: data.favorites ?? [],
+            favorites: data.favorites ?? this.defaults.favorites,
+            profileImage: data.profileImage,
             createdAt: data.createdAt?.toDate(),
           } as User;
         }),
@@ -59,7 +62,7 @@ export class AuthService {
   async register(email: string, password: string, name: string): Promise<void> {
     const credential = await createUserWithEmailAndPassword(this.auth, email, password);
     await updateProfile(credential.user, { displayName: name });
-    await this.createUserDocument(credential.user.uid, email, name);
+    await this.createUserDocument(credential.user.uid, name, '', email);
   }
 
   async loginWithGoogle(): Promise<void> {
@@ -67,8 +70,9 @@ export class AuthService {
     const credential = await signInWithPopup(this.auth, provider);
     await this.createUserDocument(
       credential.user.uid,
-      credential.user.email ?? '',
       credential.user.displayName ?? '',
+      '',
+      credential.user.email ?? '',
     );
   }
 
@@ -80,16 +84,17 @@ export class AuthService {
     return email === environment.adminEmail;
   }
 
-  private async createUserDocument(uid: string, email: string, name: string): Promise<void> {
+  private async createUserDocument(uid: string, firstName: string, lastName: string, email: string): Promise<void> {
     const userRef = doc(this.firestore, 'users', uid);
 
     const userDoc: Partial<User> = {
       uid,
+      firstName,
+      lastName,
       email,
-      name,
-      roles: this.isAdmin(email) ? ['admin'] : ['client'],
-      hostStatus: 'not_applicable',
-      favorites: [],
+      roles: this.isAdmin(email) ? ['admin'] : this.defaults.roles,
+      hostStatus: this.defaults.hostStatus,
+      favorites: this.defaults.favorites,
       createdAt: new Date(),
     };
 
