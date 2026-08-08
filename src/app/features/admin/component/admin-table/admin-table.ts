@@ -5,6 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export interface AdminTableColumn<T> {
   key: keyof T;
   label: string;
+  format?: (row: T) => string;
 }
 
 @Component({
