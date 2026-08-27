@@ -9,4 +9,9 @@ export const adminRoutes: Routes = [
     path: 'users',
     loadComponent: () => import('./pages/admin-users.page/admin-users.page').then((m) => m.AdminUsersPage),
   },
+    {
+    path: 'host-requests',
+    loadComponent: () =>
+      import('./pages/admin-host-requests.page/admin-host-requests.page').then((m) => m.AdminHostRequestsPage),
+  },
 ];
