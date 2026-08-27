@@ -8,10 +8,11 @@ import { Observable, of } from 'rxjs';
 import { SpacesService } from '../../../../core/services/spaces.service';
 import { FavoritesService } from '../../../../core/services/favorites.service';
 import { SpaceModel } from '../../../../core/models/space.model';
+import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 
 @Component({
   selector: 'app-space-detail',
-  imports: [CommonModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  imports: [ MarketplaceNavMenu, CommonModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
   templateUrl: './space-detail.html',
 })
 export class SpaceDetail implements OnInit {

@@ -8,10 +8,11 @@ import { SpaceModel } from '../../../../core/models/space.model';
 import { SpaceCard } from '../../../../shared/components/space-card/space-card';
 import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
 import { MatIconModule } from '@angular/material/icon';
+import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 
 @Component({
   selector: 'app-results-grid',
-  imports: [CommonModule, MatProgressSpinnerModule, SpaceCard, EmptyState, MatIconModule],
+  imports: [ MarketplaceNavMenu, CommonModule, MatProgressSpinnerModule, SpaceCard, EmptyState, MatIconModule],
   templateUrl: './results-grid.html',
 })
 export class ResultsGrid implements OnInit {
