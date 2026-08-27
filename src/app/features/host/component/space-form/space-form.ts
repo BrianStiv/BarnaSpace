@@ -27,7 +27,7 @@ import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/
   templateUrl: './space-form.html',
 })
 export class SpaceForm {
-  submit = output<Omit<SpaceModel, 'id'>>();
+  spaceSubmit = output<Omit<SpaceModel, 'id'>>();
   cancel = output<void>();
   initialData = input<Partial<SpaceModel> | null>(null);
   submitLabel = input<string>('Publicar espacio');
@@ -121,6 +121,6 @@ export class SpaceForm {
       publicationStatus: 'pending_approval',
     };
 
-    this.submit.emit(spaceData);
+    this.spaceSubmit.emit(spaceData);
   }
 }
