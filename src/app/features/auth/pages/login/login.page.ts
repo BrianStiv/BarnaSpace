@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { MatIconModule} from '@angular/material/icon';
 import { LoginForm } from '../../components/login-form/login-form';
+import { LoginRequest } from '../../../../core/models/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +16,9 @@ export class LoginPage {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  async onLogin(credentials: { email: string; password: string }) {
+  async onLogin(credentials: LoginRequest){
     try {
-      await this.authService.login(credentials.email, credentials.password);
+      await this.authService.login(credentials);
       this.router.navigate(['/marketplace']);
     } catch (error) {
       console.error('Login error:', error);
