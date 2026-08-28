@@ -18,4 +18,5 @@ export interface SpaceModel {
   hostId: string;
   publicationStatus: 'pending_approval' | 'published' | 'rejected' | 'deactivated';
   hasDamageInsurance?: boolean;
+  rejectionReason?: string;
 }

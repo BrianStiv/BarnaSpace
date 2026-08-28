@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { LoginRequest } from '../../../../core/models/auth.model';
+
 
 @Component({
   selector: 'app-login-form',
@@ -11,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './login-form.html',
 })
 export class LoginForm {
-  login = output<{ email: string; password: string }>();
+  login = output<LoginRequest>();
 
   form: FormGroup;
 

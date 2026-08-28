@@ -9,12 +9,14 @@ import {
   signOut,
   updateProfile,
   User as FirebaseUser,
+  sendPasswordResetEmail,
 } from '@angular/fire/auth';
 import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { User, createUserDefaults } from '../../../core/models/user.model';
 import { environment } from '../../../../environment/environment';
+import { LoginRequest, RegisterRequest } from '../../../core/models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -55,14 +57,15 @@ export class AuthService {
     }),
   );
 
-  async login(email: string, password: string): Promise<void> {
-    await signInWithEmailAndPassword(this.auth, email, password);
+  async login(credentials: LoginRequest): Promise<void> {
+    await signInWithEmailAndPassword(this.auth, credentials.email, credentials.password);
   }
 
-  async register(email: string, password: string, name: string): Promise<void> {
-    const credential = await createUserWithEmailAndPassword(this.auth, email, password);
-    await updateProfile(credential.user, { displayName: name });
-    await this.createUserDocument(credential.user.uid, name, '', email);
+  async register(data: RegisterRequest): Promise<void> {
+    const credential = await createUserWithEmailAndPassword(this.auth, data.email, data.password);
+    const fullName = `${data.firstName} ${data.lastName}`;
+    await updateProfile(credential.user, { displayName: fullName });
+    await this.createUserDocument(credential.user.uid, data.firstName, data.lastName, data.email);
   }
 
   async loginWithGoogle(): Promise<void> {
