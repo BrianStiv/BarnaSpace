@@ -26,6 +26,7 @@ export class AdminNavMenu {
     { icon: 'dashboard', label: 'Dashboard', path: '/admin/dashboard' },
     { icon: 'people', label: 'Usuarios', path: '/admin/users' },
     { icon: 'person_add', label: 'Solicitudes host', path: '/admin/host-requests' },
+    { icon: 'article', label: 'Publicaciones', path: '/admin/publications' },
   ];
 
   toggle() {

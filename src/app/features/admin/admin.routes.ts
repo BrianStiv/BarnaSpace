@@ -14,4 +14,10 @@ export const adminRoutes: Routes = [
     loadComponent: () =>
       import('./pages/admin-host-requests.page/admin-host-requests.page').then((m) => m.AdminHostRequestsPage),
   },
+    {
+    path: 'publications',
+    loadComponent: () =>
+      import('./pages/admin-publications.page/admin-publications.page').then((m) => m.AdminPublicationsPage),
+  },
+
 ];

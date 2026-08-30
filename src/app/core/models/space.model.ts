@@ -2,6 +2,7 @@ import { Location } from './location.model';
 import { SpaceCategory } from './space-category.model';
 import { Amenity } from './amenity.model';
 
+export type PublicationStatus = 'pending_approval' | 'published' | 'rejected' | 'deactivated';
 
 export interface SpaceModel {
   id?: string;
@@ -16,7 +17,7 @@ export interface SpaceModel {
   blockedDates: string[];
   images: string[];
   hostId: string;
-  publicationStatus: 'pending_approval' | 'published' | 'rejected' | 'deactivated';
+  publicationStatus: PublicationStatus;
   hasDamageInsurance?: boolean;
   rejectionReason?: string;
 }

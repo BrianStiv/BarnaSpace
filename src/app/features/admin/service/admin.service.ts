@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, query, where, limit, doc, writeBatch, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, where, limit, doc, writeBatch, arrayUnion, updateDoc } from '@angular/fire/firestore';
 import { Observable, combineLatest, map } from 'rxjs';
 import { User } from '../../../core/models/user.model';
 import { SpaceModel } from '../../../core/models/space.model';
@@ -58,6 +58,11 @@ export class AdminService {
     return collectionData(q, { idField: 'id' }).pipe(map((spaces) => spaces[0] as SpaceModel | undefined));
   }
 
+  getSpacesByStatus(status: SpaceModel['publicationStatus'], maxItems = 100): Observable<SpaceModel[]> {
+    const q = query(this.spacesCollection, where('publicationStatus', '==', status), limit(maxItems));
+    return collectionData(q, { idField: 'id' }) as Observable<SpaceModel[]>;
+  }
+
   async approveHostRequest(uid: string, spaceId: string): Promise<void> {
     const batch = writeBatch(this.firestore);
     const userRef = doc(this.firestore, 'users', uid);
@@ -95,5 +100,26 @@ export class AdminService {
     batch.update(spaceRef, spaceUpdate);
 
     await batch.commit();
+  }
+
+  async approvePublication(id: string): Promise<void> {
+    const spaceRef = doc(this.firestore, 'spaces', id);
+    await updateDoc(spaceRef, { publicationStatus: 'published' });
+  }
+
+  async rejectPublication(id: string, reason?: string): Promise<void> {
+    const spaceRef = doc(this.firestore, 'spaces', id);
+    const update: Partial<SpaceModel> = { publicationStatus: 'rejected' };
+
+    if (reason) {
+      update.rejectionReason = reason;
+    }
+
+    await updateDoc(spaceRef, update);
+  }
+
+  async deactivatePublication(id: string): Promise<void> {
+    const spaceRef = doc(this.firestore, 'spaces', id);
+    await updateDoc(spaceRef, { publicationStatus: 'deactivated' });
   }
 }
