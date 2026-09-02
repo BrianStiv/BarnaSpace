@@ -13,9 +13,9 @@ import {
   arrayUnion,
   arrayRemove,
 } from '@angular/fire/firestore';
-import { Auth, User } from '@angular/fire/auth';
+import { Auth, User, user } from '@angular/fire/auth';
 import { Observable, of, firstValueFrom } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { Booking } from '../models/booking.model';
 import { SpaceModel } from '../models/space.model';
@@ -30,12 +30,14 @@ export class BookingsService {
   private bookingsCollection = collection(this.firestore, 'bookings');
 
   private getRequiredUser(): User | null {
-    const user = this.auth.currentUser;
-    if (!user) {
+    const currentUser = this.auth.currentUser;
+
+    if (!currentUser) {
       console.warn('Usuario no autenticado');
       return null;
     }
-    return user;
+
+    return currentUser;
   }
 
   async checkAvailability(spaceId: string, date: string): Promise<boolean> {
@@ -79,19 +81,25 @@ export class BookingsService {
   }
 
   getBookingsByClient(): Observable<Booking[]> {
-    const currentUser = this.getRequiredUser();
-    if (!currentUser) return of([]);
+    return user(this.auth).pipe(
+      switchMap((currentUser) => {
+        if (!currentUser) return of([]);
 
-    const q = query(this.bookingsCollection, where('clientId', '==', currentUser.uid));
-    return collectionData(q, { idField: 'id' }) as Observable<Booking[]>;
+        const q = query(this.bookingsCollection, where('clientId', '==', currentUser.uid));
+        return collectionData(q, { idField: 'id' }) as Observable<Booking[]>;
+      }),
+    );
   }
 
   getBookingsByHost(): Observable<Booking[]> {
-    const currentUser = this.getRequiredUser();
-    if (!currentUser) return of([]);
+    return user(this.auth).pipe(
+      switchMap((currentUser) => {
+        if (!currentUser) return of([]);
 
-    const q = query(this.bookingsCollection, where('hostId', '==', currentUser.uid));
-    return collectionData(q, { idField: 'id' }) as Observable<Booking[]>;
+        const q = query(this.bookingsCollection, where('hostId', '==', currentUser.uid));
+        return collectionData(q, { idField: 'id' }) as Observable<Booking[]>;
+      }),
+    );
   }
 
   getHostRevenue(): Observable<number> {

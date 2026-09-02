@@ -81,6 +81,14 @@ export class SpaceDetail {
       return;
     }
 
+    const guests = Number(this.guests());
+    const capacity = Number(space.capacity);
+
+    if (guests > capacity) {
+      this.feedbackMessage.set(`El aforo máximo es de ${capacity} personas.`);
+      return;
+    }
+
     const user = await firstValueFrom(this.authService.currentUser$);
     if (!user) {
       this.router.navigate(['/auth/login'], {
@@ -100,7 +108,7 @@ export class SpaceDetail {
         return;
       }
 
-      await this.bookingsService.createBooking(space, selectedDate, this.guests());
+      await this.bookingsService.createBooking(space, selectedDate, guests);
       this.feedbackMessage.set('Reserva enviada. Queda pendiente de aprobación.');
     } catch (error) {
       console.error('Booking error:', error);
