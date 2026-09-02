@@ -13,29 +13,25 @@
       <h1 class="text-2xl font-bold text-dark">Resultados</h1>
     </div>
 
-    @if (loading) {
-      <div class="flex justify-center py-12">
-        <mat-spinner color="primary"></mat-spinner>
-      </div>
-    } @else {
+       @if (spaces(); as list) {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        @for (space of spaces$ | async; track space.id) {
-          <app-space-card
-            [space]="space"
-            (click)="goToDetail(space)"
-          />
+        @for (space of list; track space.id) {
+          <app-space-card [space]="space" (click)="goToDetail(space)" />
         }
       </div>
 
-      @if ((spaces$ | async)?.length === 0) {
+      @if (list.length === 0) {
         <div class="mt-12">
           <app-empty-state
             title="No hay espacios disponibles"
             message="Prueba a cambiar los filtros o ampliar tu búsqueda."
-            icon="search_off"
-          />
+            icon="search_off" />
         </div>
       }
+    } @else {
+      <div class="flex justify-center py-12">
+        <mat-spinner color="primary"></mat-spinner>
+      </div>
     }
   </div>
 </div>

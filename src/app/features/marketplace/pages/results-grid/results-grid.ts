@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs/operators';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, of } from 'rxjs';
 import { SpacesService, SpaceFilters } from '../../../../core/services/spaces.service';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { SpaceCard } from '../../../../shared/components/space-card/space-card';
@@ -12,45 +13,33 @@ import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-na
 
 @Component({
   selector: 'app-results-grid',
-  imports: [ MarketplaceNavMenu, CommonModule, MatProgressSpinnerModule, SpaceCard, EmptyState, MatIconModule],
+  imports: [MarketplaceNavMenu, CommonModule, MatProgressSpinnerModule, SpaceCard, EmptyState, MatIconModule],
   templateUrl: './results-grid.html',
 })
-export class ResultsGrid implements OnInit {
+export class ResultsGrid {
   private route = inject(ActivatedRoute);
   router = inject(Router);
   private spacesService = inject(SpacesService);
 
-  spaces$: Observable<SpaceModel[]> = of([]);
-  loading = true;
+  private filters$ = this.route.queryParams.pipe(
+    map((params) => {
+      const filters: SpaceFilters = {};
 
-  ngOnInit() {
-    const queryParams = this.route.snapshot.queryParams;
+      if (params['category']) filters.category = params['category'];
+      if (params['neighborhood']) filters.neighborhood = params['neighborhood'];
+      if (params['maxPrice']) filters.maxPrice = Number(params['maxPrice']);
+      if (params['guests']) filters.minCapacity = Number(params['guests']);
+      if (params['petFriendly']) filters.petFriendly = params['petFriendly'] === 'true';
 
-    const filters: SpaceFilters = {};
+      return filters;
+    }),
+  );
 
-    if (queryParams['category']) {
-      filters.category = queryParams['category'];
-    }
-
-    if (queryParams['neighborhood']) {
-      filters.neighborhood = queryParams['neighborhood'];
-    }
-
-    if (queryParams['maxPrice']) {
-      filters.maxPrice = Number(queryParams['maxPrice']);
-    }
-
-    if (queryParams['guests']) {
-      filters.minCapacity = Number(queryParams['guests']);
-    }
-
-    if (queryParams['petFriendly']) {
-      filters.petFriendly = queryParams['petFriendly'] === 'true';
-    }
-
-    this.spaces$ = this.spacesService.filterSpaces(filters);
-    this.loading = false;
-  }
+  spaces: Signal<SpaceModel[] | undefined> = toSignal(
+    this.filters$.pipe(
+      switchMap((filters) => this.spacesService.filterSpaces(filters)),
+    ),
+  );
 
   goToDetail(space: SpaceModel) {
     this.router.navigate(['/marketplace/space', space.id]);

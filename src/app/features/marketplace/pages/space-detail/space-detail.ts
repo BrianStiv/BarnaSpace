@@ -1,39 +1,66 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs/operators';
+import { firstValueFrom, of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Observable, of } from 'rxjs';
+
 import { SpacesService } from '../../../../core/services/spaces.service';
 import { FavoritesService } from '../../../../core/services/favorites.service';
+import { BookingsService } from '../../../../core/services/bookings.service';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
+import { AuthService } from '../../../auth/service/auth.service';
 
 @Component({
   selector: 'app-space-detail',
-  imports: [ MarketplaceNavMenu, CommonModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule],
+  imports: [
+    FormsModule,
+    MarketplaceNavMenu,
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
   templateUrl: './space-detail.html',
 })
-export class SpaceDetail implements OnInit {
+export class SpaceDetail {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private spacesService = inject(SpacesService);
   private favoritesService = inject(FavoritesService);
+  private bookingsService = inject(BookingsService);
+  private authService = inject(AuthService);
 
-  space$: Observable<SpaceModel | undefined> = of(undefined);
-  isFavorite$ = of(false);
+  private spaceId$ = this.route.paramMap.pipe(map((params) => params.get('id')));
 
-  ngOnInit() {
-    const spaceId = this.route.snapshot.paramMap.get('id');
+  space: Signal<SpaceModel | undefined> = toSignal(
+    this.spaceId$.pipe(
+      switchMap((id) => (id ? this.spacesService.getById(id) : of(undefined))),
+    ),
+  );
 
-    if (!spaceId) {
+  isFavorite: Signal<boolean> = toSignal(
+    this.spaceId$.pipe(
+      switchMap((id) => (id ? this.favoritesService.isFavorite(id) : of(false))),
+    ),
+    { initialValue: false },
+  );
+
+  date = signal('');
+  guests = signal(1);
+  feedbackMessage = signal<string | null>(null);
+  processing = signal(false);
+
+  constructor() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id) {
       this.router.navigate(['/marketplace']);
-      return;
     }
-
-    this.space$ = this.spacesService.getById(spaceId);
-    this.isFavorite$ = this.favoritesService.isFavorite(spaceId);
   }
 
   toggleFavorite(space: SpaceModel) {
@@ -44,5 +71,42 @@ export class SpaceDetail implements OnInit {
 
   goBack() {
     this.router.navigate(['/marketplace/results']);
+  }
+
+  async onReserve(space: SpaceModel) {
+    const selectedDate = this.date();
+
+    if (!selectedDate) {
+      this.feedbackMessage.set('Selecciona la fecha de tu evento.');
+      return;
+    }
+
+    const user = await firstValueFrom(this.authService.currentUser$);
+    if (!user) {
+      this.router.navigate(['/auth/login'], {
+        queryParams: { returnUrl: `/marketplace/space/${space.id}` },
+      });
+      return;
+    }
+
+    this.processing.set(true);
+    this.feedbackMessage.set(null);
+
+    try {
+      const available = await this.bookingsService.checkAvailability(space.id!, selectedDate);
+
+      if (!available) {
+        this.feedbackMessage.set('La fecha seleccionada no está disponible.');
+        return;
+      }
+
+      await this.bookingsService.createBooking(space, selectedDate, this.guests());
+      this.feedbackMessage.set('Reserva enviada. Queda pendiente de aprobación.');
+    } catch (error) {
+      console.error('Booking error:', error);
+      this.feedbackMessage.set('Error al crear la reserva.');
+    } finally {
+      this.processing.set(false);
+    }
   }
 }
