@@ -1,5 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Auth } from '@angular/fire/auth';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AddressInput } from '../address-input/address-input';
 import { ImageUrlInput } from '../image-url-input/image-url-input';
 import { SpaceModel } from '../../../../core/models/space.model';
-import { SpaceCategory,SPACE_CATEGORIES } from '../../../../core/models/space-category.model';
+import { SpaceCategory, SPACE_CATEGORIES } from '../../../../core/models/space-category.model';
 import { AMENITIES } from '../../../../core/models/amenity.model';
 import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';
 
@@ -27,6 +28,8 @@ import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/
   templateUrl: './space-form.html',
 })
 export class SpaceForm {
+  private auth = inject(Auth);
+
   spaceSubmit = output<Omit<SpaceModel, 'id'>>();
   cancel = output<void>();
   initialData = input<Partial<SpaceModel> | null>(null);
@@ -35,14 +38,13 @@ export class SpaceForm {
   categories = SPACE_CATEGORIES;
   amenities = AMENITIES;
 
-    simpleFields: DynamicFieldConfig[] = [
+  simpleFields: DynamicFieldConfig[] = [
     { name: 'name', label: 'Nombre completo', type: 'text', required: true },
     { name: 'description', label: 'Descripción', type: 'textarea', required: true },
     { name: 'dailyPrice', label: 'Precio por día (€)', type: 'number', required: true, min: 1 },
     { name: 'capacity', label: 'Aforo', type: 'number', required: true, min: 1 },
     { name: 'squareMeters', label: 'Metros cuadrados', type: 'number', required: true, min: 1 },
   ];
-
 
   form: FormGroup;
 
@@ -100,9 +102,9 @@ export class SpaceForm {
     const spaceData: Omit<SpaceModel, 'id'> = {
       name: formValue.name,
       description: formValue.description,
-      dailyPrice: formValue.dailyPrice,
-      capacity: formValue.capacity,
-      squareMeters: formValue.squareMeters,
+      dailyPrice: Number(formValue.dailyPrice),
+      capacity: Number(formValue.capacity),
+      squareMeters: Number(formValue.squareMeters),
       location: {
         fullAddress: formValue.address,
         neighborhood: '',
@@ -117,7 +119,7 @@ export class SpaceForm {
       amenities: formValue.amenities,
       images: formValue.images,
       blockedDates: [],
-      hostId: 'current_user_id',
+      hostId: this.auth.currentUser?.uid ?? '',
       publicationStatus: 'pending_approval',
     };
 

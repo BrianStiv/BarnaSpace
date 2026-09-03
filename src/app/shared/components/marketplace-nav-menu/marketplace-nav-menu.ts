@@ -46,7 +46,7 @@ export class MarketplaceNavMenu {
 
     const hostLinks: NavLink[] = [
       { icon: 'add_circle', label: 'Publicar espacio', path: '/host/publish' },
-      { icon: 'bar_chart', label: 'Estadísticas', path: '/host/statistics' },
+      { icon: 'bashboard', label: 'Panel de anfitrion', path: '/host/panel' },
       { icon: 'event', label: 'Mis reservas', path: '/marketplace' },
     ];
 
