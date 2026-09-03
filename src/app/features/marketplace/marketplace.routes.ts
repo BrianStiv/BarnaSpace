@@ -14,4 +14,8 @@ export const marketplaceRoutes: Routes = [
     path: 'space/:id',
     loadComponent: () => import('./pages/space-detail/space-detail').then((m) => m.SpaceDetail),
   },
+  {
+  path: 'my-bookings',
+  loadComponent: () => import('./pages/my-bookings.page/my-bookings.page').then((m) => m.MyBookingsPage),
+  },
 ];

@@ -42,12 +42,12 @@ export class MarketplaceNavMenu {
     const authenticatedLinks: NavLink[] = [
       { icon: 'person', label: 'Mi perfil', path: '/marketplace' },
       { icon: 'favorite', label: 'Favoritos', path: '/marketplace' },
+      { icon: 'event', label: 'Mis reservas', path: '/marketplace/my-bookings' },
     ];
 
     const hostLinks: NavLink[] = [
       { icon: 'add_circle', label: 'Publicar espacio', path: '/host/publish' },
       { icon: 'bashboard', label: 'Panel de anfitrion', path: '/host/panel' },
-      { icon: 'event', label: 'Mis reservas', path: '/marketplace' },
     ];
 
     if (!u) {
