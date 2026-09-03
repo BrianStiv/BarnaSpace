@@ -27,6 +27,7 @@ export class AdminNavMenu {
     { icon: 'people', label: 'Usuarios', path: '/admin/users' },
     { icon: 'person_add', label: 'Solicitudes host', path: '/admin/host-requests' },
     { icon: 'article', label: 'Publicaciones', path: '/admin/publications' },
+    { icon: 'event', label: 'Reservas', path: '/admin/bookings' },
   ];
 
   toggle() {
