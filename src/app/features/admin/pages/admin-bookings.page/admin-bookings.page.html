@@ -1,0 +1,67 @@
+<div class="min-h-screen bg-cream px-4 py-8">
+  <div class="max-w-7xl mx-auto">
+    
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-dark">Reservas</h1>
+      <app-admin-nav-menu />
+    </div>
+
+    @if (feedbackMessage()) {
+      <div class="mb-6 p-4 rounded-lg bg-forest/10 text-forest font-medium">
+        {{ feedbackMessage() }}
+      </div>
+    }
+
+    <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+      <mat-tab label="Pendientes" />
+      <mat-tab label="Confirmadas" />
+      <mat-tab label="Rechazadas" />
+      <mat-tab label="Canceladas" />
+    </mat-tab-group>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-6">
+      
+      <mat-card class="lg:col-span-3">
+        <mat-card-content>
+          @if (bookingsResource.isLoading()) {
+            <div class="flex justify-center py-8">
+              <mat-spinner diameter="40" />
+            </div>
+          } @else {
+            <app-admin-table
+              [columns]="bookingColumns"
+              [data]="filteredBookings()"
+              (rowClick)="onRowSelect($event)" />
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <div class="lg:col-span-2">
+        <app-admin-detail-panel
+          [sections]="detailSections()"
+          emptyMessage="Selecciona una reserva para ver el detalle">
+          
+          <ng-template #actions>
+            @if (selectedBooking()) {
+              <button
+                type="button"
+                mat-flat-button
+                class="w-full !bg-terracota !text-white"
+                [disabled]="processing()"
+                (click)="onCancel()">
+                
+                @if (processing()) {
+                  <mat-spinner diameter="20" class="inline-block" />
+                } @else {
+                  Anular reserva
+                }
+              </button>
+            }
+          </ng-template>
+
+        </app-admin-detail-panel>
+      </div>
+
+    </div>
+  </div>
+</div>
