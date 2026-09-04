@@ -33,33 +33,45 @@ export class MarketplaceNavMenu {
   user = toSignal(this.authService.currentUser$, { initialValue: null });
 
   links = computed<NavLink[]>(() => {
-    const u = this.user();
+  const u = this.user();
 
-    const base: NavLink[] = [
+  if (!u) {
+    return [
       { icon: 'home', label: 'Marketplace', path: '/marketplace' },
+      { icon: 'login', label: 'Iniciar sesión', path: '/auth/login' },
     ];
+  }
 
-    const authenticatedLinks: NavLink[] = [
-      { icon: 'person', label: 'Mi perfil', path: '/marketplace' },
-      { icon: 'favorite', label: 'Favoritos', path: '/marketplace' },
-      { icon: 'event', label: 'Mis reservas', path: '/marketplace/my-bookings' },
+  if (u.roles.includes('admin')) {
+    return [
+      { icon: 'dashboard', label: 'Dashboard', path: '/admin/dashboard' },
+      { icon: 'people', label: 'Usuarios', path: '/admin/users' },
+      { icon: 'person_add', label: 'Solicitudes host', path: '/admin/host-requests' },
+      { icon: 'article', label: 'Publicaciones', path: '/admin/publications' },
+      { icon: 'event', label: 'Reservas', path: '/admin/bookings' },
     ];
+  }
 
-    const hostLinks: NavLink[] = [
+  const clientLinks: NavLink[] = [
+    { icon: 'home', label: 'Marketplace', path: '/marketplace' },
+    { icon: 'person', label: 'Mi perfil', path: '/marketplace' },
+    { icon: 'favorite', label: 'Favoritos', path: '/marketplace' },
+    { icon: 'event', label: 'Mis reservas', path: '/marketplace/my-bookings' },
+  ];
+
+  if (u.roles.includes('host')) {
+    return [
+      ...clientLinks,
       { icon: 'add_circle', label: 'Publicar espacio', path: '/host/publish' },
-      { icon: 'bashboard', label: 'Panel de anfitrion', path: '/host/panel' },
+      { icon: 'dashboard', label: 'Panel de anfitrión', path: '/host/panel' },
     ];
+  }
 
-    if (!u) {
-      return [...base, { icon: 'login', label: 'Iniciar sesión', path: '/auth/login' }];
-    }
-
-    if (u.roles.includes('host')) {
-      return [...base, ...authenticatedLinks, ...hostLinks];
-    }
-
-    return [...base, ...authenticatedLinks];
-  });
+  return [
+    ...clientLinks,
+    { icon: 'handshake', label: 'Ser anfitrión', path: '/marketplace/become-host' },
+  ];
+});
 
   toggle() {
     this.navOpen.update(v => !v);
