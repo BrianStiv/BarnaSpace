@@ -10,7 +10,7 @@ export const environment = {
     appId: "1:853204307559:web:b5ca9ce05b0582846b8ec2"
   },
 
-  googleMaps: {
+  googleMaps:{
     apiKey: "fkjslkfskfjlsf"
   },
   genkit: {
