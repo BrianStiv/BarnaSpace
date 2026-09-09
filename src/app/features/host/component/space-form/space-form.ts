@@ -11,6 +11,7 @@ import { SpaceModel } from '../../../../core/models/space.model';
 import { SpaceCategory, SPACE_CATEGORIES } from '../../../../core/models/space-category.model';
 import { AMENITIES } from '../../../../core/models/amenity.model';
 import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';
+import { GeocodingService } from '../../../../core/services/geocoding.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/
 })
 export class SpaceForm {
   private auth = inject(Auth);
+  private geocodingService = inject(GeocodingService);
 
   spaceSubmit = output<Omit<SpaceModel, 'id'>>();
   cancel = output<void>();
@@ -58,6 +60,9 @@ export class SpaceForm {
       capacity: [initial?.capacity ?? 0, [Validators.required, Validators.min(1)]],
       squareMeters: [initial?.squareMeters ?? 0, [Validators.required, Validators.min(1)]],
       address: [initial?.location?.fullAddress ?? '', Validators.required],
+      zipCode: [initial?.location?.zipCode ?? '', Validators.required],
+      city: [initial?.location?.city ?? 'Barcelona', Validators.required],
+      neighborhood: [initial?.location?.neighborhood ?? ''],
       images: [initial?.images ?? [] as string[], [Validators.required, Validators.minLength(1)]],
       categories: [initial?.categories ?? [] as string[], Validators.required],
       amenities: [initial?.amenities ?? [] as string[]],
@@ -94,10 +99,27 @@ export class SpaceForm {
     return this.form.value[controlName].includes(value);
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.form.invalid) return;
 
     const formValue = this.form.value;
+
+    let lat = 0;
+    let lon = 0;
+    let precision: 'exact' | 'approximate' | undefined;
+
+    try {
+      const result = await this.geocodingService.geocode(
+        formValue.address,
+        formValue.city,
+        formValue.zipCode,
+      );
+      lat = result.lat;
+      lon = result.lon;
+      precision = result.precision;
+    } catch {
+    }
+
 
     const spaceData: Omit<SpaceModel, 'id'> = {
       name: formValue.name,
@@ -107,13 +129,14 @@ export class SpaceForm {
       squareMeters: Number(formValue.squareMeters),
       location: {
         fullAddress: formValue.address,
-        neighborhood: '',
-        city: 'Barcelona',
+        neighborhood: formValue.neighborhood,
+        city: formValue.city,
         province: 'Barcelona',
         autonomousCommunity: 'Cataluña',
-        zipCode: '',
-        lat: 0,
-        lon: 0,
+        zipCode: formValue.zipCode,
+        lat,
+        lon,
+        precision,
       },
       categories: formValue.categories,
       amenities: formValue.amenities,

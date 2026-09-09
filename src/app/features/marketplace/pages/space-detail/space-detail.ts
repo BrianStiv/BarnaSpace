@@ -15,6 +15,7 @@ import { BookingsService } from '../../../../core/services/bookings.service';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 import { AuthService } from '../../../auth/service/auth.service';
+import { SpaceMap } from '../../../../shared/components/space-map/space-map';
 
 @Component({
   selector: 'app-space-detail',
@@ -25,6 +26,7 @@ import { AuthService } from '../../../auth/service/auth.service';
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
+    SpaceMap,
   ],
   templateUrl: './space-detail.html',
 })
