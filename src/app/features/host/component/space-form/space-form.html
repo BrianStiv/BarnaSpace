@@ -5,6 +5,21 @@
 
   <app-address-input [address]="form.value.address" (addressChange)="form.patchValue({ address: $event })" />
 
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Código postal</mat-label>
+    <input matInput type="text" formControlName="zipCode" placeholder="08013" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Ciudad</mat-label>
+    <input matInput type="text" formControlName="city" placeholder="Barcelona" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Barrio (opcional)</mat-label>
+    <input matInput type="text" formControlName="neighborhood" placeholder="Gràcia" />
+  </mat-form-field>
+
   <div>
     <p class="text-sm text-medium mb-2">Categorías</p>
     <div class="flex flex-wrap gap-2">
