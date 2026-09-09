@@ -7,4 +7,5 @@ export interface Location {
   zipCode: string;
   lat: number;
   lon: number;
+  precision?: 'exact' | 'approximate';
 }
