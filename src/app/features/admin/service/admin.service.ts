@@ -4,10 +4,12 @@ import { Observable, combineLatest, map } from 'rxjs';
 import { User } from '../../../core/models/user.model';
 import { SpaceModel } from '../../../core/models/space.model';
 import { DashboardMetrics } from '../../../core/models/dashboard-metrics.model';
+import { BookingsService } from '../../../core/services/bookings.service';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private firestore = inject(Firestore);
+  private bookingsService = inject(BookingsService);
 
   private usersCollection = collection(this.firestore, 'users');
   private spacesCollection = collection(this.firestore, 'spaces');
@@ -15,15 +17,18 @@ export class AdminService {
   getDashboardMetrics(): Observable<DashboardMetrics> {
     return combineLatest([
       this.getUsers(),
-      this.getSpaces()
+      this.getSpaces(),
+      this.bookingsService.getAllBookings(),
     ]).pipe(
-      map(([users, spaces]) => ({
+      map(([users, spaces, bookings]) => ({
         totalUsers: users.length,
         totalSpaces: spaces.length,
-        totalBookings: 0,
+        totalBookings: bookings.length,
         pendingHostRequests: users.filter(u => u.hostStatus === 'pending').length,
         pendingPublications: spaces.filter(s => s.publicationStatus === 'pending_approval').length,
-        totalRevenue: 0
+        totalRevenue: bookings
+        .filter(b => b.status === 'confirmed')
+        .reduce((t, b) => t + b.totalPrice, 0),
       }))
     );
   }

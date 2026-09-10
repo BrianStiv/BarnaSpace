@@ -12,9 +12,25 @@ import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
 import { SpaceModel } from '../../../../core/models/space.model';
 
+import { ClientsHostsChart } from '../../component/clients-host-chart/clients-host-chart';
+import { BookingsMonthChart } from '../../component/bookings-month-chart/bookings-month-chart';
+import { BookingsStatusChart } from '../../component/bookings-status-chart/bookings-status-chart';
+import { SpacesStatusChart } from '../../component/spaces-status-chart/spaces-status-chart';
+
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [CommonModule, MatCardModule, MatIconModule, MatProgressSpinnerModule, AdminTable, AdminNavMenu],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    AdminTable,
+    AdminNavMenu,
+    ClientsHostsChart,
+    BookingsMonthChart,
+    BookingsStatusChart,
+    SpacesStatusChart,
+  ],
   templateUrl: './admin-dashboard.page.html',
 })
 export class AdminDashboard {

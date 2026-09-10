@@ -3,6 +3,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideNgxStripe } from 'ngx-stripe';
 import { environment } from '../environment/environment';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     provideNgxStripe(environment.stripePublicKey),
+    provideCharts(withDefaultRegisterables()), 
   ],
 };
