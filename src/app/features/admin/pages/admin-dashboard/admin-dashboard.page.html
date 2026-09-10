@@ -26,6 +26,44 @@
       }
     </div>
 
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Clientes vs Anfitriones</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-clients-hosts-chart />
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Reservas por estado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-bookings-status-chart />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Reservas por mes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-bookings-month-chart />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Espacios por estado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-spaces-status-chart />
+        </mat-card-content>
+      </mat-card>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <mat-card>
         <mat-card-header>
