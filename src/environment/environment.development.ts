@@ -19,4 +19,6 @@ export const environment = {
   },
   stripePublicKey: 'pk_test_51TqqzEDbPO1Py7MUy4Wmcm0ilSBPUdw0iPZohdfDHU3veKlEbGEnhcT35IfZd1mTZBgMAPnqVoMho53qWfKPkaBQ00O4BEodWs',
   adminEmail: 'admin.panel@barnaspaces.com',
+  cloudinaryCloudName: 'azzi5eiy',
+  cloudinaryUploadPreset: 'barnaspace_upload',
 };

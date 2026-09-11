@@ -1,28 +1,38 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CloudinaryService } from '../../../../core/services/cloudinary.service';
 
 @Component({
   selector: 'app-image-url-input',
-  imports: [ CommonModule, FormsModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatIconModule ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './image-url-input.html',
 })
 export class ImageUrlInput {
+  private cloudinaryService = inject(CloudinaryService);
+
   images = input<string[]>([]);
   imagesChange = output<string[]>();
-  newImageUrl = '';
+  
+  uploading = signal(false);
+  error = signal<string | null>(null);
 
-  addImage() {
-    const trimmed = this.newImageUrl.trim();
-    if (!trimmed) return;
+  async openUploader() {
+    this.error.set(null);
+    this.uploading.set(true);
 
-    const current = this.images();
-    this.imagesChange.emit([...current, trimmed]);
-    this.newImageUrl = '';
+    try {
+      const uploadedUrls = await this.cloudinaryService.uploadImages();
+      const current = this.images();
+      this.imagesChange.emit([...current, ...uploadedUrls]);
+    } catch (err) {
+      console.error(err);
+      this.error.set('Error al subir las imágenes.');
+    } finally {
+      this.uploading.set(false);
+    }
   }
 
   removeImage(index: number) {
