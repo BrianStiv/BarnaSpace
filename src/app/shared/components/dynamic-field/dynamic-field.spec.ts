@@ -1,22 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormControl, FormGroup } from '@angular/forms';
 import { DynamicField } from './dynamic-field';
 
 describe('DynamicField', () => {
-  let component: DynamicField;
-  let fixture: ComponentFixture<DynamicField>;
+  function createField(field: any, form: FormGroup): ComponentFixture<DynamicField> {
+    const fixture = TestBed.createComponent(DynamicField);
+    fixture.componentRef.setInput('field', field);
+    fixture.componentRef.setInput('form', form);
+    fixture.detectChanges();
+    return fixture;
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DynamicField],
-    }).compileComponents();
+  it('shows the field label', () => {
+    const form = new FormGroup({ name: new FormControl('') });
+    const fixture = createField({ name: 'name', label: 'Nombre completo', type: 'text' }, form);
 
-    fixture = TestBed.createComponent(DynamicField);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
+    expect(fixture.nativeElement.textContent).toContain('Nombre completo');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renders an input for text type', () => {
+    const form = new FormGroup({ name: new FormControl('') });
+    const fixture = createField({ name: 'name', label: 'Nombre', type: 'text' }, form);
+
+    expect(fixture.nativeElement.querySelector('input')).toBeTruthy();
+  });
+
+  it('renders a textarea for textarea type', () => {
+    const form = new FormGroup({ description: new FormControl('') });
+    const fixture = createField({ name: 'description', label: 'Descripción', type: 'textarea' }, form);
+
+    expect(fixture.nativeElement.querySelector('textarea')).toBeTruthy();
   });
 });
