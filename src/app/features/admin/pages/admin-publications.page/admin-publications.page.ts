@@ -12,7 +12,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-table';
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
-import { AdminNavMenu } from '../../component/admin-nav-menu/admin-nav-menu';
 import { AdminService } from '../../service/admin.service';
 import { SpaceModel, PublicationStatus } from '../../../../core/models/space.model';
 
@@ -30,7 +29,6 @@ import { SpaceModel, PublicationStatus } from '../../../../core/models/space.mod
     MatProgressSpinnerModule,
     AdminTable,
     AdminDetailPanel,
-    AdminNavMenu,
   ],
   templateUrl: './admin-publications.page.html',
 })

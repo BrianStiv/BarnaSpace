@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-table';
-import { AdminNavMenu } from '../../component/admin-nav-menu/admin-nav-menu';
 import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
 import { SpaceModel } from '../../../../core/models/space.model';
@@ -25,7 +24,6 @@ import { SpacesStatusChart } from '../../component/spaces-status-chart/spaces-st
     MatIconModule,
     MatProgressSpinnerModule,
     AdminTable,
-    AdminNavMenu,
     ClientsHostsChart,
     BookingsMonthChart,
     BookingsStatusChart,

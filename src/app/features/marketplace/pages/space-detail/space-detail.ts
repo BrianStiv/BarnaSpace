@@ -13,7 +13,6 @@ import { SpacesService } from '../../../../core/services/spaces.service';
 import { FavoritesService } from '../../../../core/services/favorites.service';
 import { BookingsService } from '../../../../core/services/bookings.service';
 import { SpaceModel } from '../../../../core/models/space.model';
-import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 import { AuthService } from '../../../auth/service/auth.service';
 import { SpaceMap } from '../../../../shared/components/space-map/space-map';
 
@@ -21,7 +20,6 @@ import { SpaceMap } from '../../../../shared/components/space-map/space-map';
   selector: 'app-space-detail',
   imports: [
     FormsModule,
-    MarketplaceNavMenu,
     CommonModule,
     MatProgressSpinnerModule,
     MatIconModule,
