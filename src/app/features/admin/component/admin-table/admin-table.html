@@ -1,0 +1,27 @@
+<div class="relative min-h-[200px]">
+  @if (loading()) {
+    <mat-spinner diameter="40" class="absolute inset-0 m-auto"></mat-spinner>
+  }
+
+  @if (!loading()) {
+    <div class="overflow-auto max-h-[500px]">
+      <table mat-table [dataSource]="data()" class="w-full">
+        @for (column of columns(); track column.key) {
+          <ng-container [matColumnDef]="$any(column.key)">
+            <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+            <td mat-cell *matCellDef="let row" class="cursor-pointer hover:bg-gray-50">
+              {{ column.format ? column.format(row) : row[column.key] }}
+            </td>
+          </ng-container>
+        }
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns();" (click)="onRowClick(row)" class="cursor-pointer"></tr>
+      </table>
+
+      @if (data().length === 0) {
+        <p class="text-center text-gray-500 py-8">Sin resultados</p>
+      }
+    </div>
+  }
+</div>

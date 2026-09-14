@@ -1,0 +1,11 @@
+<div class="min-h-screen bg-cream px-4 py-8">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold text-dark mb-6">Publicar espacio</h1>
+
+    <app-space-form
+      submitLabel="Publicar espacio"
+      (spaceSubmit)="onSubmit($event)"
+      (cancel)="onCancel()"
+    />
+  </div>
+</div>

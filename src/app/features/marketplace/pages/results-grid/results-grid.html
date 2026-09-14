@@ -1,0 +1,31 @@
+<div class="bg-cream py-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center gap-4 mb-6">
+      <button mat-icon-button (click)="router.navigate(['/marketplace'])">
+        <mat-icon class="text-dark">arrow_back</mat-icon>
+      </button>
+      <h1 class="text-2xl font-bold text-dark">Resultados</h1>
+    </div>
+
+       @if (spaces(); as list) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (space of list; track space.id) {
+          <app-space-card [space]="space" (click)="goToDetail(space)" />
+        }
+      </div>
+
+      @if (list.length === 0) {
+        <div class="mt-12">
+          <app-empty-state
+            title="No hay espacios disponibles"
+            message="Prueba a cambiar los filtros o ampliar tu búsqueda."
+            icon="search_off" />
+        </div>
+      }
+    } @else {
+      <div class="flex justify-center py-12">
+        <mat-spinner color="primary"></mat-spinner>
+      </div>
+    }
+  </div>
+</div>

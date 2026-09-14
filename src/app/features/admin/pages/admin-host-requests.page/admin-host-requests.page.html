@@ -1,0 +1,79 @@
+<div class="bg-cream py-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-dark">Solicitudes de anfitrión</h1>
+    </div>
+
+    @if (feedbackMessage()) {
+      <div class="mb-6 p-4 rounded-lg bg-forest/10 text-forest font-medium">
+        {{ feedbackMessage() }}
+      </div>
+    }
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <mat-card class="lg:col-span-3">
+        <mat-card-content>
+          @if (requestsResource.isLoading()) {
+            <div class="flex justify-center py-8">
+              <mat-spinner diameter="40" />
+            </div>
+          } @else {
+            <app-admin-table
+              [columns]="requestColumns"
+              [data]="requestsResource.value() ?? []"
+              [loading]="requestsResource.isLoading()"
+              (rowClick)="onRowSelect($event)" />
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <div class="lg:col-span-2">
+        <app-admin-detail-panel
+          [sections]="detailSections()"
+          emptyMessage="Selecciona una solicitud para ver el detalle">
+          <ng-template #actions>
+            @if (selectedUser()) {
+              <div class="flex flex-col gap-4">
+                <mat-form-field appearance="outline" class="w-full">
+                  <mat-label>Motivo de rechazo (opcional)</mat-label>
+                  <input
+                    matInput
+                    [(ngModel)]="rejectionReason"
+                    placeholder="Indica el motivo si rechazas" />
+                </mat-form-field>
+
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    mat-flat-button
+                    class="flex-1 !bg-forest !text-white"
+                    [disabled]="processing()"
+                    (click)="onApprove()">
+                    @if (processing()) {
+                      <mat-spinner diameter="20" class="inline-block" />
+                    } @else {
+                      Aprobar
+                    }
+                  </button>
+
+                  <button
+                    type="button"
+                    mat-flat-button
+                    class="flex-1 !bg-terracota !text-white"
+                    [disabled]="processing()"
+                    (click)="onReject()">
+                    @if (processing()) {
+                      <mat-spinner diameter="20" class="inline-block" />
+                    } @else {
+                      Rechazar
+                    }
+                  </button>
+                </div>
+              </div>
+            }
+          </ng-template>
+        </app-admin-detail-panel>
+      </div>
+    </div>
+  </div>
+</div>

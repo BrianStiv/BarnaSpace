@@ -1,0 +1,93 @@
+<div class="bg-cream py-6">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-dark">Panel de Administración</h1>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      @if (metrics.isLoading()) {
+        <div class="col-span-full flex justify-center py-8">
+          <mat-spinner diameter="40" />
+        </div>
+      } @else if (metrics.error()) {
+        <p class="col-span-full text-red-500 text-center py-8">Error al cargar métricas</p>
+      } @else {
+        @for (card of metricCards(); track card.label) {
+          <mat-card class="text-center !p-4"
+            [class.border-2]="card.highlight"
+            [class.!border-terracota]="card.highlight">
+            <mat-icon class="!text-3xl !text-terracota mb-2">{{ card.icon }}</mat-icon>
+            <div class="text-2xl font-bold text-dark">{{ card.value }}</div>
+            <div class="text-sm text-medium">{{ card.label }}</div>
+          </mat-card>
+        }
+      }
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Clientes vs Anfitriones</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-clients-hosts-chart />
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Reservas por estado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-bookings-status-chart />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Reservas por mes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-bookings-month-chart />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Espacios por estado</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-spaces-status-chart />
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Usuarios recientes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-admin-table
+            [columns]="userColumns"
+            [data]="recentUsers.value() ?? []"
+            [loading]="recentUsers.isLoading()" />
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="!text-lg !font-semibold !text-dark">Espacios recientes</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <app-admin-table
+            [columns]="spaceColumns"
+            [data]="recentSpaces.value() ?? []"
+            [loading]="recentSpaces.isLoading()" />
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+</div>

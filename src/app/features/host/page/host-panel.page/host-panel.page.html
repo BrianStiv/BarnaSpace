@@ -1,0 +1,71 @@
+<div class="bg-cream py-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-dark mb-6">Panel de anfitrión</h1>
+
+    <mat-card class="mb-6">
+      <mat-card-content class="flex items-center gap-4">
+        <mat-icon class="text-forest">payments</mat-icon>
+        <div>
+          <p class="text-sm text-gray-500">Ingresos totales (confirmadas)</p>
+          <p class="text-2xl font-bold text-dark">{{ revenue() }} €</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    @if (feedbackMessage()) {
+      <div class="mb-6 p-4 rounded-lg bg-forest/10 text-forest font-medium">
+        {{ feedbackMessage() }}
+      </div>
+    }
+
+    <mat-tab-group (selectedIndexChange)="onTabChange(tabStatuses[$event])">
+      <mat-tab label="Pendientes"></mat-tab>
+      <mat-tab label="Confirmadas"></mat-tab>
+      <mat-tab label="Rechazadas"></mat-tab>
+      <mat-tab label="Canceladas"></mat-tab>
+    </mat-tab-group>
+
+    @if (bookingsResource.isLoading()) {
+      <div class="flex justify-center py-8">
+        <mat-spinner diameter="40" />
+      </div>
+    } @else {
+      @for (booking of filteredBookings(); track booking.id) {
+        <mat-card class="mt-4">
+          <mat-card-content>
+            <div class="flex justify-between items-start gap-4">
+              <div>
+                <h3 class="font-semibold text-dark">{{ booking.spaceName }}</h3>
+                <p class="text-sm text-medium">Cliente: {{ booking.clientName }}</p>
+                <p class="text-sm text-medium">Fecha: {{ booking.date }}</p>
+                <p class="text-sm text-medium">Invitados: {{ booking.guests }}</p>
+                <p class="text-sm font-semibold text-terracota">{{ booking.totalPrice }} €</p>
+              </div>
+
+              @if (booking.status === 'pending') {
+                <div class="flex gap-2 shrink-0">
+                  <button
+                    mat-flat-button
+                    class="!bg-forest !text-white"
+                    [disabled]="processing()"
+                    (click)="onApprove(booking)">
+                    Aprobar
+                  </button>
+                  <button
+                    mat-flat-button
+                    class="!bg-terracota !text-white"
+                    [disabled]="processing()"
+                    (click)="onReject(booking)">
+                    Rechazar
+                  </button>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      } @empty {
+        <p class="text-center text-gray-500 py-8">No hay reservas en este estado.</p>
+      }
+    }
+  </div>
+</div>

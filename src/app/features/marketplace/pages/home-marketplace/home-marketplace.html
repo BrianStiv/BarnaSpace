@@ -1,0 +1,52 @@
+<div class="bg-cream py-6">
+
+  <div class="max-w-4xl mx-auto text-center">
+    <h1 class="text-3xl font-bold text-dark mb-2">¿Qué tipo de evento quieres celebrar?</h1>
+
+    <p class="text-medium mb-6">Encuentra el espacio perfecto para tu celebración en Barcelona.</p>
+    <div class="flex flex-wrap justify-center gap-3 mb-8">
+      @for (category of categories; track category) {
+        <button
+          type="button"
+          (click)="selectCategory(category)"
+          class="px-5 py-3 rounded-full border-2 transition-colors"
+          [class.border-terracota]="selectedCategory === category"
+          [class.bg-terracota]="selectedCategory === category"
+          [class.text-white]="selectedCategory === category"
+          [class.border-medium]="selectedCategory !== category"
+          [class.text-dark]="selectedCategory !== category"
+          [class.hover:border-terracota]="selectedCategory !== category"
+        >
+          {{ category | titlecase }}
+        </button>
+      }
+    </div>
+
+    <div class="max-w-md mx-auto space-y-4 mb-8 text-left">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>¿Dónde?</mat-label>
+        <input matInput [(ngModel)]="neighborhood" placeholder="Barrio de Barcelona" />
+        <mat-icon matSuffix>location_on</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>¿Cuándo?</mat-label>
+        <input matInput [(ngModel)]="when" type="date" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>¿Cuántos?</mat-label>
+        <input matInput [(ngModel)]="guests" type="number" placeholder="Número de invitados" />
+        <mat-icon matSuffix>group</mat-icon>
+      </mat-form-field>
+
+      <button
+        mat-flat-button
+        class="w-full !bg-terracota !text-white !py-4 !rounded-full text-lg font-semibold"
+        (click)="searchSpaces()"
+      >
+        Buscar espacios
+      </button>
+    </div>
+  </div>
+</div>

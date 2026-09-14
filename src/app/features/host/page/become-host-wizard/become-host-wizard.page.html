@@ -1,0 +1,73 @@
+<div class="bg-cream py-6">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold text-dark mb-6">Ser anfitrión</h1>
+
+    <div class="flex items-center gap-2 mb-6">
+      @for (step of ['Datos personales', 'Datos fiscales', 'Tu espacio']; track $index) {
+        <div
+          class="px-3 py-1 rounded-full text-sm font-medium"
+          [class.bg-terracota]="currentStep >= $index"
+          [class.text-white]="currentStep >= $index"
+          [class.bg-light]="currentStep < $index"
+          [class.text-medium]="currentStep < $index">
+          {{ $index + 1 }}
+        </div>
+      }
+    </div>
+
+    @switch (currentStep) {
+      @case (0) {
+        <form [formGroup]="personalForm" class="space-y-4">
+          @for (field of personalFields; track field.name) {
+            <app-dynamic-field [field]="field" [form]="personalForm" />
+          }
+        </form>
+      }
+
+      @case (1) {
+        <form [formGroup]="fiscalForm" class="space-y-4">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tipo de entidad</mat-label>
+            <mat-select formControlName="entityType">
+              <mat-option value="particular">Particular</mat-option>
+              <mat-option value="autonomo">Autónomo</mat-option>
+              <mat-option value="sociedad">Sociedad</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Tipo de documento</mat-label>
+            <mat-select formControlName="documentType">
+              <mat-option value="NIF">NIF</mat-option>
+              <mat-option value="NIE">NIE</mat-option>
+              <mat-option value="CIF">CIF</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          @for (field of fiscalSimpleFields; track field.name) {
+            <app-dynamic-field [field]="field" [form]="fiscalForm" />
+          }
+        </form>
+      }
+
+      @case (2) {
+        <app-space-form
+          submitLabel="Enviar solicitud"
+          (spaceSubmit)="onSpaceSubmit($event)"
+          (cancel)="onCancel()" />
+      }
+    }
+
+    @if (currentStep < 2) {
+      <div class="flex justify-between mt-6">
+        <button type="button" mat-stroked-button (click)="previousStep()" [disabled]="currentStep === 0">
+          Anterior
+        </button>
+
+        <button type="button" mat-flat-button class="!bg-terracota !text-white" (click)="nextStep()">
+          Siguiente
+        </button>
+      </div>
+    }
+  </div>
+</div>
