@@ -1,6 +1,12 @@
-<div class="relative">
+<div class="relative flex items-center gap-3">
+  @if (user()) {
+    <span class="text-sm font-medium text-dark hidden sm:block">
+      Bienvenido, {{ user()!.firstName || 'usuario' }}
+    </span>
+  }
   <button mat-icon-button (click)="toggle()" aria-label="Menú de marketplace">
     <mat-icon>menu</mat-icon>
+
   </button>
 
   @if (navOpen()) {

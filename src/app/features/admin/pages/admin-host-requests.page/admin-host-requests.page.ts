@@ -13,7 +13,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-table';
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
-import { AdminNavMenu } from '../../component/admin-nav-menu/admin-nav-menu';
 import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
 import { SpaceModel } from '../../../../core/models/space.model';
@@ -32,7 +31,6 @@ import { SpaceModel } from '../../../../core/models/space.model';
     MatProgressSpinnerModule,
     AdminTable,
     AdminDetailPanel,
-    AdminNavMenu,
   ],
   templateUrl: './admin-host-requests.page.html',
 })

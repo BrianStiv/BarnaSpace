@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { SpaceForm } from '../../../../features/host/component/space-form/space-form';
+import { SpaceForm } from '../../component/space-form/space-form';
 import { SpacesService } from '../../../../core/services/spaces.service';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';

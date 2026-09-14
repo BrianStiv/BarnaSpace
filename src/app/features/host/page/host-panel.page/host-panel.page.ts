@@ -9,7 +9,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { BookingsService } from '../../../../core/services/bookings.service';
 import { Booking, BookingStatus } from '../../../../core/models/booking.model';
-import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 
 @Component({
   selector: 'app-host-panel',
@@ -20,7 +19,6 @@ import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-na
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MarketplaceNavMenu,
   ],
   templateUrl: './host-panel.page.html',
 })

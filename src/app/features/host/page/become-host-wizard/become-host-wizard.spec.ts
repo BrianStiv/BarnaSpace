@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { BecomeHostWizard } from './become-host-wizard.page.';
+import { BecomeHostWizard } from './become-host-wizard.page';
 import { SpacesService } from '../../../../core/services/spaces.service';
 import { HostService } from '../../../../core/services/host.service';
 

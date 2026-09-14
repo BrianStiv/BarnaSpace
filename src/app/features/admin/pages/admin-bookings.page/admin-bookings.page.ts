@@ -9,7 +9,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-table';
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
-import { AdminNavMenu } from '../../component/admin-nav-menu/admin-nav-menu';
 import { BookingsService } from '../../../../core/services/bookings.service';
 import { Booking, BookingStatus } from '../../../../core/models/booking.model';
 
@@ -23,7 +22,6 @@ import { Booking, BookingStatus } from '../../../../core/models/booking.model';
     MatProgressSpinnerModule,
     AdminTable,
     AdminDetailPanel,
-    AdminNavMenu,
   ],
   templateUrl: './admin-bookings.page.html',
 })

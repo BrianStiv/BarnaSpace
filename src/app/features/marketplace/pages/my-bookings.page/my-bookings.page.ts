@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { BookingsService } from '../../../../core/services/bookings.service';
 import { BookingStatus } from '../../../../core/models/booking.model';
-import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-nav-menu/marketplace-nav-menu';
 
 @Component({
   selector: 'app-my-bookings',
@@ -18,7 +17,6 @@ import { MarketplaceNavMenu } from '../../../../shared/components/marketplace-na
     MatTabsModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MarketplaceNavMenu,
   ],
   templateUrl: './my-bookings.page.html',
 })

@@ -13,7 +13,6 @@ import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
 import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
-import { AdminNavMenu } from '../../component/admin-nav-menu/admin-nav-menu';
 
 type RoleFilter = 'all' | 'client' | 'host';
 
@@ -22,7 +21,7 @@ type RoleFilter = 'all' | 'client' | 'host';
   imports: [
     MatCardModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatProgressSpinnerModule,
-    AdminTable, AdminDetailPanel, AdminNavMenu,
+    AdminTable, AdminDetailPanel
   ],
   templateUrl: './admin-users.page.html',
 })

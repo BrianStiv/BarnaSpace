@@ -19,7 +19,7 @@ export const marketplaceRoutes: Routes = [
     path: 'become-host',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('../host/page/become-host-wizard/become-host-wizard.page.').then((m) => m.BecomeHostWizard),
+      import('../host/page/become-host-wizard/become-host-wizard.page').then((m) => m.BecomeHostWizard),
   },
 
   {
