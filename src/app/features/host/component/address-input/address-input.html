@@ -1,10 +1,16 @@
-<mat-form-field appearance="outline" class="w-full">
-  <mat-label>{{ label() }}</mat-label>
-  <input
-    matInput
-    type="text"
-    [ngModel]="address()"
-    (ngModelChange)="addressChange.emit($event)"
-    [placeholder]="label()"
-  />
-</mat-form-field>
+<div class="space-y-1 w-full">
+  <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+    {{ label() }}
+  </label>
+
+  <div class="relative flex items-center bg-gray-50/80 rounded-2xl border border-gray-200 focus-within:border-terracota focus-within:bg-white focus-within:ring-2 focus-within:ring-terracota/20 transition-all px-4 py-2.5">
+    <input
+      type="text"
+      [ngModel]="address()"
+      (ngModelChange)="addressChange.emit($event)"
+      [placeholder]="label()"
+      class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0"
+    />
+    <mat-icon class="!text-lg text-terracota shrink-0 ml-2" aria-hidden="true">location_on</mat-icon>
+  </div>
+</div>
