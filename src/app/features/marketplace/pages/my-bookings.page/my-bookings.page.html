@@ -1,53 +1,106 @@
-<div class="bg-cream py-6">
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-dark mb-6">Mis reservas</h1>
+<div class="min-h-screen bg-cream py-8 md:py-12">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    
+    <div class="mb-8">
+      <span class="inline-block px-3.5 py-1 rounded-full bg-terracota/10 text-terracota text-xs font-bold uppercase tracking-wider mb-2">
+        Historial
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-dark tracking-tight">Mis reservas</h1>
+      <p class="text-medium text-sm sm:text-base mt-1">Consulta el estado de tus peticiones y eventos reservados.</p>
+    </div>
 
-<mat-tab-group (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="Pendientes"></mat-tab>
-      <mat-tab label="Confirmadas"></mat-tab>
-      <mat-tab label="Rechazadas"></mat-tab>
-      <mat-tab label="Canceladas"></mat-tab>
-    </mat-tab-group>
+    <div class="bg-white p-1.5 rounded-2xl sm:rounded-full shadow-sm border border-gray-100 flex flex-wrap sm:flex-nowrap gap-1 mb-8">
+      @for (label of ['Pendientes', 'Confirmadas', 'Rechazadas', 'Canceladas']; track $index) {
+        <button
+          type="button"
+          (click)="onTabChange($index)"
+          class="flex-1 py-2.5 px-4 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all text-center active:scale-95 cursor-pointer"
+          [class.bg-terracota]="activeStatus() === tabStatuses[$index]"
+          [class.text-white]="activeStatus() === tabStatuses[$index]"
+          [class.shadow-md]="activeStatus() === tabStatuses[$index]"
+          [class.text-gray-500]="activeStatus() !== tabStatuses[$index]"
+          [class.hover:text-dark]="activeStatus() !== tabStatuses[$index]"
+          [class.hover:bg-gray-50]="activeStatus() !== tabStatuses[$index]">
+          {{ label }}
+        </button>
+      }
+    </div>
 
     @if (bookings.isLoading()) {
-      <div class="flex justify-center py-8">
-        <mat-spinner diameter="40" />
+      <div class="flex justify-center py-12">
+        <mat-spinner diameter="40" color="primary"></mat-spinner>
       </div>
     } @else {
-      <div class="space-y-4 mt-4">
+      <div class="space-y-4">
         @for (booking of filteredBookings(); track booking.id) {
-          <mat-card>
-            <mat-card-content class="flex items-center justify-between gap-4">
-              <div class="flex items-center gap-4">
-                <mat-icon class="text-medium">event</mat-icon>
-                <div>
-                  <h3 class="font-semibold text-dark">{{ booking.spaceName }}</h3>
-                  <p class="text-sm text-medium">Fecha: {{ booking.date }}</p>
-                  <p class="text-sm text-medium">Invitados: {{ booking.guests }}</p>
-                  <p class="text-sm font-semibold text-terracota">{{ booking.totalPrice }} €</p>
+          <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition-all">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-terracota/10 text-terracota flex items-center justify-center shrink-0 mt-0.5">
+                  <mat-icon class="!text-2xl">event</mat-icon>
+                </div>
+
+                <div class="space-y-1">
+                  <h3 class="font-extrabold text-dark text-lg leading-snug">{{ booking.spaceName }}</h3>
+                  
+                  <div class="flex flex-wrap items-center gap-3 text-xs text-medium">
+                    <p class="flex items-center gap-1 font-medium">
+                      <mat-icon class="!text-sm text-gray-400">calendar_today</mat-icon>
+                      <span class="text-gray-400">Fecha:</span> <strong class="text-dark">{{ booking.date }}</strong>
+                    </p>
+                    <span class="text-gray-300">•</span>
+                    <p class="flex items-center gap-1 font-medium">
+                      <mat-icon class="!text-sm text-gray-400">group</mat-icon>
+                      <span class="text-gray-400">Invitados:</span> <strong class="text-dark">{{ booking.guests }}</strong>
+                    </p>
+                  </div>
+
+                  <p class="text-sm font-extrabold text-terracota pt-0.5">
+                    {{ booking.totalPrice }} €
+                  </p>
                 </div>
               </div>
 
-              @switch (booking.status) {
-                @case ('pending') {
-                  <span class="px-3 py-1 rounded-full bg-mustard/20 text-dark text-sm font-medium">Pendiente</span>
+              <div class="shrink-0 self-end sm:self-center">
+                @switch (booking.status) {
+                  @case ('pending') {
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-mustard/20 text-dark text-xs font-bold">
+                      <span class="w-2 h-2 rounded-full bg-mustard"></span>
+                      Pendiente
+                    </span>
+                  }
+                  @case ('confirmed') {
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-forest/15 text-forest text-xs font-bold">
+                      <span class="w-2 h-2 rounded-full bg-forest"></span>
+                      Confirmada
+                    </span>
+                  }
+                  @case ('rejected') {
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-bold">
+                      <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                      Rechazada
+                    </span>
+                  }
+                  @case ('cancelled') {
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
+                      <span class="w-2 h-2 rounded-full bg-gray-400"></span>
+                      Cancelada
+                    </span>
+                  }
                 }
-                @case ('confirmed') {
-                  <span class="px-3 py-1 rounded-full bg-forest/20 text-forest text-sm font-medium">Confirmada</span>
-                }
-                @case ('rejected') {
-                  <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm font-medium">Rechazada</span>
-                }
-                @case ('cancelled') {
-                  <span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm font-medium">Cancelada</span>
-                }
-              }
-            </mat-card-content>
-          </mat-card>
+              </div>
+
+            </div>
+          </div>
         } @empty {
-          <p class="text-center text-gray-500 py-8">No tienes reservas en este estado.</p>
+          <div class="bg-white/60 rounded-3xl border border-dashed border-gray-200 p-12 text-center">
+            <mat-icon class="!text-4xl text-gray-300 mb-2">event_busy</mat-icon>
+            <p class="text-gray-500 font-medium text-sm">No tienes reservas en este estado actualmente.</p>
+          </div>
         }
       </div>
     }
+
   </div>
 </div>

@@ -5,11 +5,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginRequest } from '../../../../core/models/auth.model';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
   selector: 'app-login-form',
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule, MatIcon],
   templateUrl: './login-form.html',
 })
 export class LoginForm {

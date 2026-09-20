@@ -1,20 +1,89 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Email</mat-label>
-    <input matInput type="email" formControlName="email" placeholder="tu@email.com" />
-  </mat-form-field>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" aria-label="Formulario de inicio de sesión" class="flex flex-col gap-4">
+  
+  <div class="space-y-1 w-full">
+    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+      Email <span class="text-terracota font-bold">*</span>
+    </label>
+    
+    <div 
+      class="relative flex items-center bg-gray-50/80 rounded-2xl border transition-all px-4 py-2.5"
+      [class.border-gray-200]="!form.get('email')?.touched || !form.get('email')?.invalid"
+      [class.border-red-500]="form.get('email')?.touched && form.get('email')?.invalid"
+      [class.focus-within:border-terracota]="!form.get('email')?.invalid"
+      [class.focus-within:bg-white]="!form.get('email')?.invalid"
+      [class.focus-within:ring-2]="!form.get('email')?.invalid"
+      [class.focus-within:ring-terracota/20]="!form.get('email')?.invalid">
+      
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="tu@email.com"
+        class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+      
+      <mat-icon class="!text-lg text-gray-400 shrink-0 ml-2" aria-hidden="true">mail_outline</mat-icon>
+    </div>
 
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Contraseña</mat-label>
-    <input matInput type="password" formControlName="password" placeholder="******" />
-  </mat-form-field>
+    @if (form.get('email')?.touched && form.get('email')?.invalid) {
+      <div class="px-1 pt-0.5">
+        @if (form.get('email')?.hasError('required')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            El email es requerido
+          </p>
+        }
+        @if (form.get('email')?.hasError('email')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Formato de email inválido
+          </p>
+        }
+      </div>
+    }
+  </div>
 
-  <button
-    mat-flat-button
-    type="submit"
-    class="w-full !bg-terracota !text-white py-3 rounded-full text-lg font-semibold"
-    [disabled]="form.invalid"
-  >
-    Iniciar sesión
-  </button>
+  <div class="space-y-1 w-full">
+    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+      Contraseña <span class="text-terracota font-bold">*</span>
+    </label>
+
+    <div 
+      class="relative flex items-center bg-gray-50/80 rounded-2xl border transition-all px-4 py-2.5"
+      [class.border-gray-200]="!form.get('password')?.touched || !form.get('password')?.invalid"
+      [class.border-red-500]="form.get('password')?.touched && form.get('password')?.invalid"
+      [class.focus-within:border-terracota]="!form.get('password')?.invalid"
+      [class.focus-within:bg-white]="!form.get('password')?.invalid"
+      [class.focus-within:ring-2]="!form.get('password')?.invalid"
+      [class.focus-within:ring-terracota/20]="!form.get('password')?.invalid">
+      
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+        class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+      
+      <mat-icon class="!text-lg text-gray-400 shrink-0 ml-2" aria-hidden="true">lock_outline</mat-icon>
+    </div>
+
+    @if (form.get('password')?.touched && form.get('password')?.invalid) {
+      <div class="px-1 pt-0.5">
+        @if (form.get('password')?.hasError('required')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            La contraseña es requerida
+          </p>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="pt-2">
+    <button
+      type="submit"
+      [disabled]="form.invalid"
+      class="w-full py-3.5 px-6 rounded-2xl font-bold text-sm text-white bg-terracota hover:bg-terracota/90 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+      <mat-icon class="!text-lg" aria-hidden="true">login</mat-icon>
+      Iniciar sesión
+    </button>
+  </div>
+
 </form>
