@@ -1,9 +1,17 @@
-<header class="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3">
+<header class="sticky top-0 z-30 bg-cream/80 backdrop-blur-md border-b border-gray-100/80 px-4 sm:px-6 py-3.5 transition-all">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
-    <div class="flex items-baseline tracking-tight">
-      <span class="text-2xl font-extrabold text-[#2C2C2C]">Barna</span>
-      <span class="text-2xl font-light text-[#E8A838] ml-0.5">Space</span>
-    </div>
+    
+    <a 
+      routerLink="/marketplace" 
+      class="flex items-center gap-2 group transition-all active:scale-95">
+
+      <div class="flex items-baseline tracking-tight">
+        <span class="text-2xl font-extrabold text-dark tracking-tighter">Barna</span>
+        <span class="text-2xl font-black text-terracota ml-0.5">Space</span>
+      </div>
+    </a>
+
     <app-marketplace-nav-menu />
+
   </div>
 </header>

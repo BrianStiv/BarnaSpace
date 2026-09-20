@@ -1,35 +1,93 @@
 @if (control(); as ctrl) {
-  @if (field().type === 'textarea') {
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>{{ field().label }}</mat-label>
-      <textarea matInput
-        [formControl]="ctrl"
-        [placeholder]="field().placeholder ?? ''"
-        [required]="field().required ?? false"
-        [attr.maxlength]="field().maxLength"
-        rows="3">
-      </textarea>
-      @if (field().hint) { <mat-hint>{{ field().hint }}</mat-hint> }
-      @if (ctrl.hasError('required')) { <mat-error>Campo requerido</mat-error> }
-      @if (ctrl.hasError('maxlength')) { <mat-error>Máximo {{ field().maxLength }} caracteres</mat-error> }
-    </mat-form-field>
-  } @else {
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>{{ field().label }}</mat-label>
-      <input matInput
-        [type]="field().type"
-        [formControl]="ctrl"
-        [placeholder]="field().placeholder ?? ''"
-        [required]="field().required ?? false"
-        [min]="field().min"
-        [max]="field().max"
-        [pattern]="field().pattern ?? ''">
-      @if (field().hint) { <mat-hint>{{ field().hint }}</mat-hint> }
-      @if (ctrl.hasError('required')) { <mat-error>Campo requerido</mat-error> }
-      @if (ctrl.hasError('min')) { <mat-error>Mínimo {{ field().min }}</mat-error> }
-      @if (ctrl.hasError('max')) { <mat-error>Máximo {{ field().max }}</mat-error> }
-      @if (ctrl.hasError('pattern')) { <mat-error>Formato inválido</mat-error> }
-      @if (ctrl.hasError('maxlength')) { <mat-error>Máximo {{ field().maxLength }} caracteres</mat-error> }
-    </mat-form-field>
-  }
+  <div class="space-y-1 w-full">
+
+    <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+      {{ field().label }}
+      @if (field().required) {
+        <span class="text-terracota font-bold ml-0.5">*</span>
+      }
+    </label>
+
+    @if (field().type === 'textarea') {
+      <div 
+        class="relative flex bg-gray-50/80 rounded-2xl border transition-all px-4 py-3"
+        [class.border-gray-200]="!ctrl.touched || !ctrl.invalid"
+        [class.border-red-500]="ctrl.touched && ctrl.invalid"
+        [class.focus-within:border-terracota]="!ctrl.invalid"
+        [class.focus-within:bg-white]="!ctrl.invalid"
+        [class.focus-within:ring-2]="!ctrl.invalid"
+        [class.focus-within:ring-terracota/20]="!ctrl.invalid">
+        
+        <textarea
+          [formControl]="ctrl"
+          [placeholder]="field().placeholder ?? ''"
+          [required]="field().required ?? false"
+          [attr.maxlength]="field().maxLength"
+          rows="3"
+          class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0 resize-y">
+        </textarea>
+      </div>
+
+    } @else {
+      <div 
+        class="relative flex items-center bg-gray-50/80 rounded-2xl border transition-all px-4 py-2.5"
+        [class.border-gray-200]="!ctrl.touched || !ctrl.invalid"
+        [class.border-red-500]="ctrl.touched && ctrl.invalid"
+        [class.focus-within:border-terracota]="!ctrl.invalid"
+        [class.focus-within:bg-white]="!ctrl.invalid"
+        [class.focus-within:ring-2]="!ctrl.invalid"
+        [class.focus-within:ring-terracota/20]="!ctrl.invalid">
+        
+        <input
+          [type]="field().type"
+          [formControl]="ctrl"
+          [placeholder]="field().placeholder ?? ''"
+          [required]="field().required ?? false"
+          [min]="field().min"
+          [max]="field().max"
+          [pattern]="field().pattern ?? ''"
+          class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+      </div>
+    }
+
+    @if (field().hint && (!ctrl.touched || !ctrl.invalid)) {
+      <p class="text-xs text-gray-400 px-1 pt-0.5">{{ field().hint }}</p>
+    }
+
+    @if (ctrl.touched && ctrl.invalid) {
+      <div class="space-y-0.5 px-1 pt-0.5">
+        @if (ctrl.hasError('required')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Campo requerido
+          </p>
+        }
+        @if (ctrl.hasError('min')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Mínimo {{ field().min }}
+          </p>
+        }
+        @if (ctrl.hasError('max')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Máximo {{ field().max }}
+          </p>
+        }
+        @if (ctrl.hasError('pattern')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Formato inválido
+          </p>
+        }
+        @if (ctrl.hasError('maxlength')) {
+          <p class="text-xs font-medium text-red-500 flex items-center gap-1">
+            <mat-icon class="!text-sm !w-3.5 !h-3.5 leading-none">error_outline</mat-icon>
+            Máximo {{ field().maxLength }} caracteres
+          </p>
+        }
+      </div>
+    }
+
+  </div>
 }
