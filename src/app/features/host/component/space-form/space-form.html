@@ -1,64 +1,112 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-  @for (field of simpleFields; track field.name) {
-  <app-dynamic-field [field]="field" [form]="form" />
-  }
+<div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100 max-w-2xl mx-auto">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
 
-  <app-address-input [address]="form.value.address" (addressChange)="form.patchValue({ address: $event })" />
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Código postal</mat-label>
-    <input matInput type="text" formControlName="zipCode" placeholder="08013" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Ciudad</mat-label>
-    <input matInput type="text" formControlName="city" placeholder="Barcelona" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="w-full">
-    <mat-label>Barrio (opcional)</mat-label>
-    <input matInput type="text" formControlName="neighborhood" placeholder="Gràcia" />
-  </mat-form-field>
-
-  <div>
-    <p class="text-sm text-medium mb-2">Categorías</p>
-    <div class="flex flex-wrap gap-2">
-      @for (category of categories; track category) {
-      <button type="button" (click)="toggleCategory(category)"
-        class="px-3 py-1 rounded-full text-sm border-2 transition-colors"
-        [class.border-terracota]="isSelected(category, 'categories')"
-        [class.bg-terracota]="isSelected(category, 'categories')"
-        [class.text-white]="isSelected(category, 'categories')"
-        [class.border-light]="!isSelected(category, 'categories')">
-        {{ category }}
-      </button>
+    <div class="space-y-4">
+      @for (field of simpleFields; track field.name) {
+      <app-dynamic-field [field]="field" [form]="form" />
       }
-    </div>
-  </div>
 
-  <div>
-    <p class="text-sm text-medium mb-2">Amenities</p>
-    <div class="flex flex-wrap gap-2">
-      @for (amenity of amenities; track amenity) {
-      <button type="button" (click)="toggleAmenity(amenity)"
-        class="px-3 py-1 rounded-full text-sm border-2 transition-colors"
-        [class.border-forest]="isSelected(amenity, 'amenities')" [class.bg-forest]="isSelected(amenity, 'amenities')"
-        [class.text-white]="isSelected(amenity, 'amenities')" [class.border-light]="!isSelected(amenity, 'amenities')">
-        {{ amenity }}
+      <app-address-input [address]="form.value.address" (addressChange)="form.patchValue({ address: $event })" />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+        <div class="space-y-1">
+          <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+            Código postal
+          </label>
+          <div
+            class="relative flex items-center bg-gray-50/80 rounded-2xl border border-gray-200 focus-within:border-terracota focus-within:bg-white focus-within:ring-2 focus-within:ring-terracota/20 transition-all px-4 py-2.5">
+            <input type="text" formControlName="zipCode" placeholder="08013"
+              class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+            <mat-icon class="!text-lg text-gray-400 shrink-0" aria-hidden="true">markunread_mailbox</mat-icon>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+            Ciudad
+          </label>
+          <div
+            class="relative flex items-center bg-gray-50/80 rounded-2xl border border-gray-200 focus-within:border-terracota focus-within:bg-white focus-within:ring-2 focus-within:ring-terracota/20 transition-all px-4 py-2.5">
+            <input type="text" formControlName="city" placeholder="Barcelona"
+              class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+            <mat-icon class="!text-lg text-gray-400 shrink-0" aria-hidden="true">location_city</mat-icon>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="space-y-1">
+        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500">
+          Barrio <span class="normal-case font-normal text-gray-400">(opcional)</span>
+        </label>
+        <div
+          class="relative flex items-center bg-gray-50/80 rounded-2xl border border-gray-200 focus-within:border-terracota focus-within:bg-white focus-within:ring-2 focus-within:ring-terracota/20 transition-all px-4 py-2.5">
+          <input type="text" formControlName="neighborhood" placeholder="Gràcia"
+            class="w-full bg-transparent text-sm font-semibold text-dark placeholder-gray-400 outline-none border-none p-0 focus:ring-0" />
+          <mat-icon class="!text-lg text-gray-400 shrink-0" aria-hidden="true">place</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-t border-gray-100 my-2" />
+
+    <div class="space-y-2">
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Categorías</p>
+      <div class="flex flex-wrap gap-2">
+        @for (category of categories; track category.id) {
+        <button type="button" (click)="toggleCategory(category.id)"
+          class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer active:scale-95"
+          [class.border-terracota]="isSelected(category.id, 'categories')"
+          [class.bg-terracota]="isSelected(category.id, 'categories')"
+          [class.text-white]="isSelected(category.id, 'categories')"
+          [class.shadow-sm]="isSelected(category.id, 'categories')"
+          [class.border-gray-200]="!isSelected(category.id, 'categories')"
+          [class.bg-gray-50]="!isSelected(category.id, 'categories')"
+          [class.text-gray-600]="!isSelected(category.id, 'categories')"
+          [class.hover:bg-gray-100]="!isSelected(category.id, 'categories')">
+          {{ category.label }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Amenities</p>
+      <div class="flex flex-wrap gap-2">
+        @for (amenity of amenities; track amenity) {
+        <button type="button" (click)="toggleAmenity(amenity)"
+          class="flex items-center px-3 py-1 rounded-full text-sm border-2 transition-colors"
+          [class.border-forest]="isSelected(amenity, 'amenities')"
+          [class.bg-forest]="isSelected(amenity, 'amenities')"
+          [class.text-white]="isSelected(amenity, 'amenities')"
+          [class.shadow-sm]="isSelected(amenity, 'amenities')"
+          [class.border-gray-200]="!isSelected(amenity, 'amenities')"
+          [class.bg-gray-50]="!isSelected(amenity, 'amenities')"
+          [class.text-gray-600]="!isSelected(amenity, 'amenities')"
+          [class.hover:bg-gray-100]="!isSelected(amenity, 'amenities')">
+          <mat-icon class="!text-base mr-1">{{ amenityIcon(amenity).icon }}</mat-icon>
+          {{ amenityIcon(amenity).label }}
+        </button>
+        }
+      </div>
+    </div>
+
+    <hr class="border-t border-gray-100 my-2" />
+
+    <app-image-url-input [images]="form.value.images" (imagesChange)="form.patchValue({ images: $event })" />
+
+    <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+      <button type="button" (click)="cancel.emit()"
+        class="w-full sm:flex-1 py-3 px-6 rounded-2xl font-bold text-sm text-gray-600 border border-gray-200 hover:bg-gray-50 transition-all active:scale-95">
+        Cancelar
       </button>
-      }
+
+      <button type="submit" [disabled]="form.invalid"
+        class="w-full sm:flex-1 py-3 px-6 rounded-2xl font-bold text-sm text-white bg-terracota hover:bg-terracota/90 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg transition-all active:scale-95">
+        {{ submitLabel() }}
+      </button>
     </div>
-  </div>
 
-  <app-image-url-input [images]="form.value.images" (imagesChange)="form.patchValue({ images: $event })" />
-
-  <div class="flex gap-3 pt-4">
-    <button type="button" mat-stroked-button class="flex-1" (click)="cancel.emit()">
-      Cancelar
-    </button>
-
-    <button type="submit" mat-flat-button class="flex-1 !bg-terracota !text-white" [disabled]="form.invalid">
-      {{ submitLabel() }}
-    </button>
-  </div>
-</form>
+  </form>
+</div>

@@ -1,13 +1,16 @@
 import { Component, inject, signal, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map, switchMap } from 'rxjs/operators';
 import { firstValueFrom, of } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ToastService } from '../../../../core/services/toast.service';
+import { AMENITY_ICONS, Amenity } from '../../../../core/models/amenity.model';
 
 import { SpacesService } from '../../../../core/services/spaces.service';
 import { FavoritesService } from '../../../../core/services/favorites.service';
@@ -25,6 +28,7 @@ import { SpaceMap } from '../../../../shared/components/space-map/space-map';
     MatIconModule,
     MatButtonModule,
     SpaceMap,
+    RouterLink
   ],
   templateUrl: './space-detail.html',
 })
@@ -35,6 +39,11 @@ export class SpaceDetail {
   private favoritesService = inject(FavoritesService);
   private bookingsService = inject(BookingsService);
   private authService = inject(AuthService);
+  private toast = inject(ToastService);
+  private location = inject(Location);
+
+  activeImage = signal(0);
+
 
   private spaceId$ = this.route.paramMap.pipe(map((params) => params.get('id')));
 
@@ -51,9 +60,10 @@ export class SpaceDetail {
     { initialValue: false },
   );
 
+  currentUser = toSignal(this.authService.currentUser$, { initialValue: null });
+
   date = signal('');
   guests = signal(1);
-  feedbackMessage = signal<string | null>(null);
   processing = signal(false);
 
   constructor() {
@@ -70,14 +80,14 @@ export class SpaceDetail {
   }
 
   goBack() {
-    this.router.navigate(['/marketplace/results']);
+    this.location.back();
   }
 
   async onReserve(space: SpaceModel) {
     const selectedDate = this.date();
 
     if (!selectedDate) {
-      this.feedbackMessage.set('Selecciona la fecha de tu evento.');
+      this.toast.show('Selecciona la fecha de tu evento.');
       return;
     }
 
@@ -85,36 +95,43 @@ export class SpaceDetail {
     const capacity = Number(space.capacity);
 
     if (guests > capacity) {
-      this.feedbackMessage.set(`El aforo máximo es de ${capacity} personas.`);
-      return;
-    }
-
-    const user = await firstValueFrom(this.authService.currentUser$);
-    if (!user) {
-      this.router.navigate(['/auth/login'], {
-        queryParams: { returnUrl: `/marketplace/space/${space.id}` },
-      });
+      this.toast.show(`El aforo máximo es de ${capacity} personas.`);
       return;
     }
 
     this.processing.set(true);
-    this.feedbackMessage.set(null);
 
     try {
       const available = await this.bookingsService.checkAvailability(space.id!, selectedDate);
 
       if (!available) {
-        this.feedbackMessage.set('La fecha seleccionada no está disponible.');
+        this.toast.show('La fecha seleccionada no está disponible.');
         return;
       }
 
       await this.bookingsService.createBooking(space, selectedDate, guests);
-      this.feedbackMessage.set('Reserva enviada. Queda pendiente de aprobación.');
+      this.toast.show('Reserva enviada. Queda pendiente de aprobación.');
     } catch (error) {
       console.error('Booking error:', error);
-      this.feedbackMessage.set('Error al crear la reserva.');
+      this.toast.show('Error al crear la reserva.');
     } finally {
       this.processing.set(false);
     }
   }
+
+  selectImage(index: number) {
+    this.activeImage.set(index);
+  }
+
+  prevImage(total: number) {
+    this.activeImage.update((i) => (i - 1 + total) % total);
+  }
+
+  nextImage(total: number) {
+    this.activeImage.update((i) => (i + 1) % total);
+  }
+
+  amenityIcon(amenity: Amenity) {
+  return AMENITY_ICONS[amenity] ?? { icon: 'check_circle', label: amenity };
+}
 }

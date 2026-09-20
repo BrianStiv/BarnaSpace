@@ -13,7 +13,7 @@ import {
 } from '@angular/fire/auth';
 import { Firestore, doc, docData, setDoc } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { User, createUserDefaults } from '../../../core/models/user.model';
 import { environment } from '../../../../environment/environment';
 import { LoginRequest, RegisterRequest } from '../../../core/models/auth.model';
@@ -85,6 +85,17 @@ export class AuthService {
 
   isAdmin(email: string): boolean {
     return email === environment.adminEmail;
+  }
+
+  getHomeRoute(): Observable<string> {
+    return this.currentUser$.pipe(
+      take(1),
+      map((user) => {
+        if (user?.roles.includes('admin')) return '/admin/dashboard';
+        if (user?.roles.includes('host') && user.hostStatus === 'approved') return '/host/panel';
+        return '/marketplace';
+      }),
+    );
   }
 
   private async createUserDocument(uid: string, firstName: string, lastName: string, email: string): Promise<void> {

@@ -1,71 +1,158 @@
-<div class="bg-cream py-6">
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-dark mb-6">Panel de anfitrión</h1>
+<div class="min-h-screen bg-cream py-8 md:py-12">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-    <mat-card class="mb-6">
-      <mat-card-content class="flex items-center gap-4">
-        <mat-icon class="text-forest">payments</mat-icon>
-        <div>
-          <p class="text-sm text-gray-500">Ingresos totales (confirmadas)</p>
-          <p class="text-2xl font-bold text-dark">{{ revenue() }} €</p>
+    <div class="mb-8">
+      <span
+        class="inline-block px-3.5 py-1 rounded-full bg-terracota/10 text-terracota text-xs font-bold uppercase tracking-wider mb-2">
+        Gestión
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-dark tracking-tight">Panel de anfitrión</h1>
+      <p class="text-medium text-sm sm:text-base mt-1">Supervisa tus ingresos, gestiona tus espacios y administra tus
+        reservas recibidas.</p>
+    </div>
+
+    <div
+      class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100 mb-10 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <div
+          class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-forest/10 text-forest flex items-center justify-center shrink-0">
+          <mat-icon class="!text-3xl sm:!text-4xl">payments</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
-
-    @if (feedbackMessage()) {
-      <div class="mb-6 p-4 rounded-lg bg-forest/10 text-forest font-medium">
-        {{ feedbackMessage() }}
+        <div>
+          <p class="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-400">Ingresos totales (confirmadas)
+          </p>
+          <p class="text-3xl sm:text-4xl font-extrabold text-dark mt-0.5">{{ revenue() }} €</p>
+        </div>
       </div>
-    }
+    </div>
 
-    <mat-tab-group (selectedIndexChange)="onTabChange(tabStatuses[$event])">
-      <mat-tab label="Pendientes"></mat-tab>
-      <mat-tab label="Confirmadas"></mat-tab>
-      <mat-tab label="Rechazadas"></mat-tab>
-      <mat-tab label="Canceladas"></mat-tab>
-    </mat-tab-group>
-
-    @if (bookingsResource.isLoading()) {
-      <div class="flex justify-center py-8">
-        <mat-spinner diameter="40" />
+    @if ((spacesResource.value() ?? []).length > 0) {
+    <div class="mb-12">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-dark">Mis espacios</h2>
+        <span class="text-xs font-bold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+          {{ (spacesResource.value() ?? []).length }} espacios
+        </span>
       </div>
-    } @else {
-      @for (booking of filteredBookings(); track booking.id) {
-        <mat-card class="mt-4">
-          <mat-card-content>
-            <div class="flex justify-between items-start gap-4">
-              <div>
-                <h3 class="font-semibold text-dark">{{ booking.spaceName }}</h3>
-                <p class="text-sm text-medium">Cliente: {{ booking.clientName }}</p>
-                <p class="text-sm text-medium">Fecha: {{ booking.date }}</p>
-                <p class="text-sm text-medium">Invitados: {{ booking.guests }}</p>
-                <p class="text-sm font-semibold text-terracota">{{ booking.totalPrice }} €</p>
-              </div>
 
-              @if (booking.status === 'pending') {
-                <div class="flex gap-2 shrink-0">
-                  <button
-                    mat-flat-button
-                    class="!bg-forest !text-white"
-                    [disabled]="processing()"
-                    (click)="onApprove(booking)">
-                    Aprobar
-                  </button>
-                  <button
-                    mat-flat-button
-                    class="!bg-terracota !text-white"
-                    [disabled]="processing()"
-                    (click)="onReject(booking)">
-                    Rechazar
-                  </button>
-                </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (space of spacesResource.value()!; track space.id) {
+        <div
+          class="bg-white p-5 rounded-3xl shadow-md border border-gray-100 flex flex-col justify-between gap-4 hover:shadow-lg transition-all">
+
+          <div class="flex justify-between items-start gap-3">
+            <div>
+              <h3 class="font-extrabold text-dark text-lg leading-snug">{{ space.name }}</h3>
+              <p class="text-xs font-semibold text-terracota mt-1">
+                {{ space.dailyPrice }} €<span class="text-gray-400 font-normal">/día</span> ·
+                <span class="text-gray-600 font-medium">{{ space.capacity }} personas</span>
+              </p>
+
+              @if (space.location?.neighborhood) {
+              <p class="text-xs font-medium text-gray-500 mt-1 flex items-center gap-1">
+                <mat-icon class="!text-sm">place</mat-icon>
+                {{ space.location.neighborhood }}
+              </p>
               }
             </div>
-          </mat-card-content>
-        </mat-card>
-      } @empty {
-        <p class="text-center text-gray-500 py-8">No hay reservas en este estado.</p>
-      }
+
+            <span
+              class="shrink-0 text-xs font-extrabold px-3 py-1.5 rounded-full shadow-xs {{ statusInfo(space.publicationStatus).badge }}">
+              {{ statusInfo(space.publicationStatus).label }}
+            </span>
+          </div>
+
+          @if (space.publicationStatus === 'rejected' && space.rejectionReason) {
+          <div class="p-3 bg-red-50 rounded-2xl border border-red-100 text-xs text-red-600">
+            <span class="font-bold">Motivo de rechazo:</span> {{ space.rejectionReason }}
+          </div>
+          }
+
+        </div>
+        }
+      </div>
+    </div>
     }
+
+    <div class="space-y-6">
+      <h2 class="text-xl sm:text-2xl font-extrabold text-dark">Reservas recibidas</h2>
+      
+      <div
+        class="bg-white p-1.5 rounded-2xl sm:rounded-full shadow-sm border border-gray-100 flex flex-wrap sm:flex-nowrap gap-1">
+        @for (label of ['Pendientes', 'Confirmadas', 'Rechazadas', 'Canceladas']; track $index) {
+        <button type="button" (click)="onTabChange(tabStatuses[$index])"
+          class="flex-1 py-2.5 px-4 rounded-xl sm:rounded-full text-xs sm:text-sm font-bold transition-all text-center active:scale-95 cursor-pointer"
+          [class.bg-terracota]="filteredBookings() && tabStatuses[$index] === activeStatus()"
+          [class.text-white]="tabStatuses[$index] === activeStatus()"
+          [class.shadow-md]="tabStatuses[$index] === activeStatus()"
+          [class.text-gray-500]="tabStatuses[$index] !== activeStatus()"
+          [class.hover:text-dark]="tabStatuses[$index] !== activeStatus()"
+          [class.hover:bg-gray-50]="tabStatuses[$index] !== activeStatus()">
+            {{ label }}
+          </button>
+        }
+      </div>
+
+      @if (bookingsResource.isLoading()) {
+        <div class=" flex justify-center py-12">
+          <mat-spinner diameter="40" color="primary"></mat-spinner>
+      </div>
+      } @else {
+      <div class="space-y-4">
+        @for (booking of filteredBookings(); track booking.id) {
+        <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-md border border-gray-100 hover:shadow-lg transition-all">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <h3 class="font-extrabold text-dark text-lg">{{ booking.spaceName }}</h3>
+                <span class="text-xs font-bold px-2.5 py-0.5 rounded-md bg-terracota/10 text-terracota">
+                  {{ booking.totalPrice }} €
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 text-xs text-medium">
+                <p class="flex items-center gap-1 font-medium">
+                  <mat-icon class="!text-sm text-gray-400">person</mat-icon>
+                  <span class="text-gray-400">Cliente:</span> <strong class="text-dark">{{ booking.clientName
+                    }}</strong>
+                </p>
+                <p class="flex items-center gap-1 font-medium">
+                  <mat-icon class="!text-sm text-gray-400">calendar_today</mat-icon>
+                  <span class="text-gray-400">Fecha:</span> <strong class="text-dark">{{ booking.date }}</strong>
+                </p>
+                <p class="flex items-center gap-1 font-medium">
+                  <mat-icon class="!text-sm text-gray-400">group</mat-icon>
+                  <span class="text-gray-400">Invitados:</span> <strong class="text-dark">{{ booking.guests }}</strong>
+                </p>
+              </div>
+            </div>
+
+            @if (booking.status === 'pending') {
+            <div class="flex items-center gap-2 w-full sm:w-auto pt-2 sm:pt-0 shrink-0">
+              <button type="button" [disabled]="processing()" (click)="onReject(booking)"
+                class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl font-bold text-xs text-terracota bg-terracota/10 hover:bg-terracota/20 disabled:opacity-50 transition-all active:scale-95">
+                Rechazar
+              </button>
+
+              <button type="button" [disabled]="processing()" (click)="onApprove(booking)"
+                class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl font-bold text-xs text-white bg-forest hover:bg-forest/90 disabled:opacity-50 shadow-md transition-all active:scale-95">
+                Aprobar
+              </button>
+            </div>
+            }
+
+          </div>
+        </div>
+        } @empty {
+        <div class="bg-white/60 rounded-3xl border border-dashed border-gray-200 p-12 text-center">
+          <mat-icon class="!text-4xl text-gray-300 mb-2">event_busy</mat-icon>
+          <p class="text-gray-500 font-medium text-sm">No hay reservas en este estado actualmente.</p>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
   </div>
 </div>

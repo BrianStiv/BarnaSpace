@@ -21,7 +21,7 @@ export class LoginPage {
   async onLogin(credentials: LoginRequest) {
     try {
       await this.authService.login(credentials);
-      this.router.navigate([this.returnUrl() || '/marketplace']);
+      this.redirectAfterLogin();
     } catch (error) {
       console.error('Login error:', error);
     }
@@ -30,9 +30,17 @@ export class LoginPage {
   async onGoogleLogin() {
     try {
       await this.authService.loginWithGoogle();
-      this.router.navigate([this.returnUrl() || '/marketplace']);
+      this.redirectAfterLogin();
     } catch (error) {
       console.error('Google Login error:', error);
     }
   }
-} 
+
+  private redirectAfterLogin() {
+    if (this.returnUrl()) {
+      this.router.navigate([this.returnUrl()]);
+      return;
+    }
+    this.authService.getHomeRoute().subscribe((route) => this.router.navigate([route]));
+  }
+}

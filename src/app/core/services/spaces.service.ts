@@ -11,7 +11,7 @@ import {
   updateDoc,
   QueryConstraint,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { SpaceModel } from '../models/space.model';
 import { SpaceCategory } from '../models/space-category.model';
 
@@ -32,7 +32,9 @@ export class SpacesService {
 
   getPublished(): Observable<SpaceModel[]> {
     const q = query(this.spacesCollection, where('publicationStatus', '==', 'published'));
-    return collectionData(q, { idField: 'id' }) as Observable<SpaceModel[]>;
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((spaces) => this.sortByNewest(spaces as SpaceModel[])),
+    );
   }
 
   filterSpaces(filters: SpaceFilters): Observable<SpaceModel[]> {
@@ -59,7 +61,9 @@ export class SpacesService {
     }
 
     const q = query(this.spacesCollection, ...constraints);
-    return collectionData(q, { idField: 'id' }) as Observable<SpaceModel[]>;
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((spaces) => this.sortByNewest(spaces as SpaceModel[])),
+    );
   }
 
   getById(id: string): Observable<SpaceModel> {
@@ -69,13 +73,16 @@ export class SpacesService {
 
   getByHost(hostId: string): Observable<SpaceModel[]> {
     const q = query(this.spacesCollection, where('hostId', '==', hostId));
-    return collectionData(q, { idField: 'id' }) as Observable<SpaceModel[]>;
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((spaces) => this.sortByNewest(spaces as SpaceModel[])),
+    );
   }
 
   async create(space: Omit<SpaceModel, 'id'>): Promise<void> {
     const newSpace = {
       ...space,
       publicationStatus: 'pending_approval' as const,
+      createdAt: new Date(),
     };
     await addDoc(this.spacesCollection, newSpace);
   }
@@ -83,5 +90,24 @@ export class SpacesService {
   updateStatus(id: string, status: SpaceModel['publicationStatus']): Promise<void> {
     const ref = doc(this.firestore, 'spaces', id);
     return updateDoc(ref, { publicationStatus: status });
+  }
+
+  private sortByNewest(spaces: SpaceModel[]): SpaceModel[] {
+    return [...spaces].sort((a, b) => {
+      const dateA = this.toTime(a.createdAt);
+      const dateB = this.toTime(b.createdAt);
+      if (dateB !== dateA) return dateB - dateA;
+      return (b.id ?? '').localeCompare(a.id ?? '');
+    });
+  }
+
+  private toTime(value: unknown): number {
+    if (!value) return 0;
+    if (value instanceof Date) return value.getTime();
+    if (typeof value === 'object' && value !== null && 'toDate' in value) {
+      return (value as { toDate: () => Date }).toDate().getTime();
+    }
+    const t = new Date(value as string | number).getTime();
+    return Number.isNaN(t) ? 0 : t;
   }
 }

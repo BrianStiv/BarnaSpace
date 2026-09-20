@@ -17,7 +17,7 @@ export class RegisterPage {
   async onRegister(data: RegisterRequest) {
     try {
       await this.authService.register(data);
-      this.router.navigate(['/marketplace']);
+      this.authService.getHomeRoute().subscribe((route) => this.router.navigate([route]));
     } catch (error) {
       console.error('Register error:', error);
     }

@@ -1,50 +1,90 @@
-<mat-card class="h-full">
-  <mat-card-content>
+<div class="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100 h-full flex flex-col justify-between">
+  <div>
     @if (sections().length === 0) {
-      <div class="text-center text-gray-500 py-8">{{ emptyMessage() }}</div>
+      <div class="bg-white/60 rounded-2xl border border-dashed border-gray-200 p-8 text-center my-auto">
+        <mat-icon class="!text-3xl text-gray-300 mb-1">info</mat-icon>
+        <p class="text-xs font-medium text-gray-400">{{ emptyMessage() }}</p>
+      </div>
     }
 
     @for (section of sections(); track $index; let last = $last) {
-      <div class="mb-6">
+      <div class="space-y-4">
+
         @if (section.title) {
-          <h3 class="text-lg font-semibold mb-3 text-gray-800">{{ section.title }}</h3>
+          <h3 class="text-base sm:text-lg font-extrabold text-dark tracking-tight flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-terracota"></span>
+            {{ section.title }}
+          </h3>
         }
 
-        @for (field of section.fields; track field.label) {
-          <div class="mb-2">
-            <div class="text-sm text-gray-500">{{ field.label }}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          @for (field of section.fields; track field.label) {
+            <div class="space-y-1">
 
-            @if (!field.type || field.type === 'text') {
-              <div class="text-gray-800">{{ field.value ?? '—' }}</div>
-            }
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                {{ field.label }}
+              </p>
 
-            @if (field.type === 'date') {
-              <div class="text-gray-800">{{ $any(field.value) | date:'medium' }}</div>
-            }
+              @if (!field.type || field.type === 'text') {
+                <p class="text-sm font-semibold text-dark leading-relaxed">
+                  {{ field.value ?? '—' }}
+                </p>
+              }
+              @if (field.type === 'date') {
+                <p class="text-sm font-semibold text-dark leading-relaxed flex items-center gap-1.5">
+                  <mat-icon class="!text-sm text-gray-400">calendar_today</mat-icon>
+                  {{ $any(field.value) | date:'medium' }}
+                </p>
+              }
 
-            @if (field.type === 'list') {
-              <div class="flex flex-wrap gap-1 mt-1">
-                @for (item of asArray(field.value); track item) {
-                  <span class="px-2 py-1 bg-gray-100 rounded text-xs">{{ item }}</span>
-                }
-                @if (asArray(field.value).length === 0) {
-                  <span class="text-gray-400 text-sm">—</span>
-                }
-              </div>
-            }
-          </div>
-        }
+              @if (field.type === 'list') {
+                <div class="flex flex-wrap gap-1.5 pt-0.5">
+                  @for (item of asArray(field.value); track item) {
+                    <span class="px-3 py-1 bg-gray-50 text-gray-600 border border-gray-200/80 rounded-full text-xs font-bold shadow-2xs">
+                      {{ item }}
+                    </span>
+                  }
+                  @if (asArray(field.value).length === 0) {
+                    <span class="text-gray-400 text-sm font-semibold">—</span>
+                  }
+                </div>
+              }
+
+              @if (field.type === 'icon-list') {
+                <div class="flex flex-wrap gap-1.5 pt-0.5">
+                  @for (item of asArray(field.value); track $index) {
+                    <span class="px-3 py-1 bg-gray-50 text-gray-600 border border-gray-200/80 rounded-full text-xs font-bold shadow-2xs inline-flex items-center gap-1.5">
+                      <mat-icon class="!text-sm text-terracota">{{ $any(item).icon }}</mat-icon>
+                      {{ $any(item).label }}
+                    </span>
+                  }
+                  @if (asArray(field.value).length === 0) {
+                    <span class="text-gray-400 text-sm font-semibold">—</span>
+                  }
+                </div>
+              }
+
+            </div>
+          }
+        </div>
+
       </div>
 
       @if (!last) {
-        <mat-divider class="my-4"></mat-divider>
+        <hr class="border-t border-gray-100 my-6" />
       }
     }
 
-    @if (actionsTemplate()) {
-      <div class="mt-6 flex gap-2">
-        <ng-container [ngTemplateOutlet]="actionsTemplate()!" />
+    @if (galleryTemplate()) {
+      <div class="mt-6 pt-4 border-t border-gray-100">
+        <ng-container [ngTemplateOutlet]="galleryTemplate()!" />
       </div>
     }
-  </mat-card-content>
-</mat-card>
+  </div>
+
+  @if (actionsTemplate()) {
+    <div class="mt-8 pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3">
+      <ng-container [ngTemplateOutlet]="actionsTemplate()!" />
+    </div>
+  }
+</div>
