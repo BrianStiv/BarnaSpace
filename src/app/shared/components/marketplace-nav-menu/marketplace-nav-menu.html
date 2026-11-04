@@ -1,39 +1,56 @@
 <div class="relative flex items-center gap-3">
+  
   @if (user()) {
-    <span class="text-sm font-medium text-dark hidden sm:block">
-      Bienvenido, {{ user()!.firstName || 'usuario' }}
-    </span>
+    <div class="hidden sm:flex items-center gap-2.5 bg-gray-50/80 border border-gray-100 py-1.5 px-3 rounded-full">
+      <div class="w-7 h-7 rounded-full bg-terracota/10 text-terracota font-bold text-xs flex items-center justify-center uppercase">
+        {{ (user()!.firstName?.[0] || 'U') }}
+      </div>
+      <span class="text-xs font-bold text-dark">
+        {{ user()!.firstName || 'Usuario' }}
+      </span>
+    </div>
   }
-  <button mat-icon-button (click)="toggle()" aria-label="Menú de marketplace">
-    <mat-icon>menu</mat-icon>
 
+  <button 
+    type="button"
+    (click)="toggle()" 
+    aria-label="Menú de marketplace"
+    class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 border border-gray-200/80 text-dark hover:bg-gray-100/80 hover:border-gray-300 transition-all active:scale-95 shadow-2xs cursor-pointer">
+    <mat-icon class="!text-xl">menu</mat-icon>
   </button>
 
   @if (navOpen()) {
-    <div class="fixed inset-0 z-40" (click)="close()"></div>
+    <div class="fixed inset-0 z-40 bg-dark/10 backdrop-blur-2xs" (click)="close()"></div>
 
-    <div class="absolute right-0 top-12 z-50 w-64 bg-white rounded-2xl shadow-xl border border-gray-200 py-2">
-      @for (item of links(); track item.path) {
-        <a [routerLink]="item.path"
-           routerLinkActive="bg-gray-100"
-           [routerLinkActiveOptions]="{ exact: false }"
-           (click)="close()"
-           class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer text-dark">
-          <mat-icon class="!text-medium">{{ item.icon }}</mat-icon>
-          <span class="text-sm font-medium">{{ item.label }}</span>
-        </a>
-      }
+    <div class="absolute right-0 top-13 z-50 w-64 bg-white rounded-3xl shadow-2xl border border-gray-100/80 py-2.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+
+      <div class="space-y-0.5 px-2">
+        @for (item of links(); track item.path) {
+          <a [routerLink]="item.path"
+             routerLinkActive="!bg-terracota/10 !text-terracota"
+             [routerLinkActiveOptions]="{ exact: false }"
+             (click)="close()"
+             class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl hover:bg-gray-50 transition-colors cursor-pointer text-dark font-medium group">
+            <mat-icon class="!text-lg text-gray-400 group-hover:text-terracota transition-colors">{{ item.icon }}</mat-icon>
+            <span class="text-xs font-bold">{{ item.label }}</span>
+          </a>
+        }
+      </div>
 
       @if (user()) {
-        <mat-divider class="!my-2"></mat-divider>
+        <div class="my-2 border-t border-gray-100"></div>
 
-        <button type="button"
-                (click)="onLogout()"
-                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer w-full text-left text-dark">
-          <mat-icon class="!text-medium">logout</mat-icon>
-          <span class="text-sm font-medium">Cerrar sesión</span>
-        </button>
+        <div class="px-2">
+          <button type="button"
+                  (click)="onLogout()"
+                  class="flex items-center gap-3 px-3.5 py-2.5 rounded-2xl hover:bg-red-50 text-red-600 transition-colors cursor-pointer w-full text-left font-medium group">
+            <mat-icon class="!text-lg text-red-400 group-hover:text-red-600 transition-colors">logout</mat-icon>
+            <span class="text-xs font-bold">Cerrar sesión</span>
+          </button>
+        </div>
       }
+
     </div>
   }
+
 </div>

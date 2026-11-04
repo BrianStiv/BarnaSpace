@@ -2,11 +2,12 @@ import { Component, input, contentChild, TemplateRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIcon } from '@angular/material/icon';
 
 export interface DetailField {
   label: string;
-  value: string | number | string[] | Date | undefined;
-  type?: 'text' | 'list' | 'date';
+  value: string | number | string[] | { icon: string; label: string }[] | Date | undefined;
+  type?: 'text' | 'list' | 'date' | 'icon-list';
 }
 
 export interface DetailSection {
@@ -17,7 +18,7 @@ export interface DetailSection {
 @Component({
   selector: 'app-admin-detail-panel',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDividerModule, DatePipe],
+  imports: [CommonModule, MatCardModule, MatDividerModule, DatePipe, MatIcon],
   templateUrl: './admin-detail-panel.html',
 })
 export class AdminDetailPanel {
@@ -25,6 +26,7 @@ export class AdminDetailPanel {
   emptyMessage = input<string>('Selecciona un item para ver el detalle');
 
   actionsTemplate = contentChild<TemplateRef<unknown>>('actions');
+  galleryTemplate = contentChild<TemplateRef<unknown>>('gallery');
 
   asArray(value: unknown): string[] {
     if (!value) return [];

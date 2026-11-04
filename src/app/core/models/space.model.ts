@@ -20,4 +20,5 @@ export interface SpaceModel {
   publicationStatus: PublicationStatus;
   hasDamageInsurance?: boolean;
   rejectionReason?: string;
+  createdAt?: Date;
 }

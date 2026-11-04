@@ -1,0 +1,60 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  @if (spaces(); as list) {
+    @if (groups().length > 0) {
+
+      <div class="mb-10">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-terracota/10 text-terracota text-xs font-bold uppercase tracking-wider mb-2">
+          Barcelona
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-dark tracking-tight">Explora por barrios</h2>
+        <p class="text-medium text-sm sm:text-base mt-1">Descubre espacios únicos repartidos por los rincones emblemáticos de la ciudad.</p>
+      </div>
+
+      <div class="space-y-10">
+        @for (group of groups(); track group.neighborhood) {
+          <section class="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+            
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-2xl bg-terracota/10 flex items-center justify-center text-terracota">
+                  <mat-icon class="!text-xl">location_on</mat-icon>
+                </div>
+                <div>
+                  <h3 class="text-xl font-extrabold text-dark tracking-tight leading-none">
+                    {{ group.neighborhood }}
+                  </h3>
+                  <span class="text-xs font-semibold text-gray-400 mt-1 block">
+                    {{ group.spaces.length }} {{ group.spaces.length === 1 ? 'espacio disponible' : 'espacios disponibles' }}
+                  </span>
+                </div>
+              </div>
+
+              <button 
+                type="button"
+                (click)="goToNeighborhood(group.neighborhood)"
+                class="inline-flex items-center gap-1.5 rounded-full bg-terracota/10 hover:bg-terracota px-4 py-2 text-xs font-bold text-terracota hover:text-white transition-all active:scale-95 cursor-pointer shadow-2xs group">
+                <span>Ver todos</span>
+                <mat-icon class="!text-sm transition-transform group-hover:translate-x-0.5">arrow_forward</mat-icon>
+              </button>
+            </div>
+
+            <div class="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 -mx-2 px-2 [scrollbar-width:thin] scrollbar-thumb-gray-200">
+              @for (space of group.spaces; track space.id) {
+                <div class="snap-start shrink-0 w-72 sm:w-80">
+                  <app-space-card [space]="space" (click)="goToDetail(space)" />
+                </div>
+              }
+            </div>
+
+          </section>
+        }
+      </div>
+
+    }
+  } @else {
+    <div class="flex flex-col items-center justify-center py-20 gap-4">
+      <mat-spinner diameter="40" color="primary" />
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Cargando barrios...</p>
+    </div>
+  }
+</div>

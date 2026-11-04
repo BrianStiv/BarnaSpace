@@ -40,11 +40,17 @@
       <p class="text-terracota font-bold text-lg">
         {{ space().dailyPrice | currency: 'EUR' }}<span class="text-sm font-normal text-medium">/día</span>
       </p>
-      @if (space().amenities.includes('pet_friendly')) {
-        <span class="text-xs bg-forest/10 text-forest px-2 py-1 rounded-full">
-          Pet Friendly
-        </span>
-      }
     </div>
+
+    @if (space().amenities.length > 0) {
+      <div class="flex flex-wrap gap-1 mt-2">
+        @for (amenity of space().amenities.slice(0, 3); track amenity) {
+          <span class="text-xs bg-forest/10 text-forest px-2 py-1 rounded-full inline-flex items-center gap-1">
+            <mat-icon class="!text-xs">{{ amenityIcon(amenity).icon }}</mat-icon>
+            {{ amenityIcon(amenity).label }}
+          </span>
+        }
+      </div>
+    }
   </div>
 </article>

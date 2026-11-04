@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatError, MatHint } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 
 export interface DynamicFieldConfig {
   name: string;
@@ -21,7 +22,7 @@ export interface DynamicFieldConfig {
 @Component({
   selector: 'app-dynamic-field',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatError, MatHint],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIcon],
   templateUrl: './dynamic-field.html',
 })
 export class DynamicField {

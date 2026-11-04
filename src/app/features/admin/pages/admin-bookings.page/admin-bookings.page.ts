@@ -11,6 +11,8 @@ import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
 import { BookingsService } from '../../../../core/services/bookings.service';
 import { Booking, BookingStatus } from '../../../../core/models/booking.model';
+import { ToastService } from '../../../../core/services/toast.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-admin-bookings-page',
@@ -22,17 +24,24 @@ import { Booking, BookingStatus } from '../../../../core/models/booking.model';
     MatProgressSpinnerModule,
     AdminTable,
     AdminDetailPanel,
+    MatIcon
   ],
   templateUrl: './admin-bookings.page.html',
 })
 export class AdminBookingsPage {
   private bookingsService = inject(BookingsService);
+  private toast = inject(ToastService);
+
   tabStatuses: BookingStatus[] = ['pending', 'confirmed', 'rejected', 'cancelled'];
 
   activeStatus = signal<BookingStatus>('pending');
   selectedBooking = signal<Booking | null>(null);
   processing = signal(false);
-  feedbackMessage = signal<string | null>(null);
+
+  canCancel = computed(() => {
+    const booking = this.selectedBooking();
+    return !!booking && (booking.status === 'pending' || booking.status === 'confirmed');
+  });
 
   bookingsResource = rxResource({
     stream: () => this.bookingsService.getAllBookings(),
@@ -79,7 +88,6 @@ export class AdminBookingsPage {
 
   onRowSelect(booking: Booking): void {
     this.selectedBooking.set(booking);
-    this.feedbackMessage.set(null);
   }
 
   async onCancel(): Promise<void> {
@@ -87,16 +95,15 @@ export class AdminBookingsPage {
     if (!booking?.id) return;
 
     this.processing.set(true);
-    this.feedbackMessage.set(null);
 
     try {
       await this.bookingsService.cancelBooking(booking);
-      this.feedbackMessage.set('Reserva anulada correctamente.');
+      this.toast.show('Reserva anulada correctamente.');
       this.resetSelection();
       this.bookingsResource.reload();
     } catch (error) {
       console.error('Cancel booking error:', error);
-      this.feedbackMessage.set('Error al anular la reserva.');
+      this.toast.show('Error al anular la reserva.');
     } finally {
       this.processing.set(false);
     }
@@ -104,6 +111,5 @@ export class AdminBookingsPage {
 
   private resetSelection(): void {
     this.selectedBooking.set(null);
-    this.feedbackMessage.set(null);
   }
 }

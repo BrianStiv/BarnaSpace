@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
@@ -71,4 +72,25 @@ h3 {
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-dark);
+}
+
+.app-toast {
+  --mat-snack-bar-container-color: var(--color-dark);
+  --mdc-snackbar-container-color: var(--color-dark);
+  --mat-snack-bar-button-color: #ffffff;
+}
+
+.app-toast--success {
+  --mat-snack-bar-container-color: var(--color-forest);
+  --mdc-snackbar-container-color: var(--color-forest);
+}
+
+.app-toast--error {
+  --mat-snack-bar-container-color: var(--color-error);
+  --mdc-snackbar-container-color: var(--color-error);
+}
+
+.app-toast--info {
+  --mat-snack-bar-container-color: var(--color-dark);
+  --mdc-snackbar-container-color: var(--color-dark);
 }

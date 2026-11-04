@@ -16,6 +16,7 @@ import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-pa
 import { AdminService } from '../../service/admin.service';
 import { User } from '../../../../core/models/user.model';
 import { SpaceModel } from '../../../../core/models/space.model';
+import { ToastService } from '../../../../core/services/toast.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ import { SpaceModel } from '../../../../core/models/space.model';
 })
 export class AdminHostRequestsPage {
     private adminService = inject(AdminService);
+    private toast = inject(ToastService);
 
   requestsResource = rxResource({ stream: () => this.adminService.getPendingHostRequests() });
 
@@ -128,7 +130,6 @@ selectedSpaceResource = rxResource({
 
   onRowSelect(user: User) {
     this.selectedUser.set(user);
-    this.feedbackMessage.set(null);
   }
 
   private async handleApproval(action: 'approve' | 'reject') {
@@ -143,10 +144,10 @@ selectedSpaceResource = rxResource({
     try {
       if (action === 'approve') {
         await this.adminService.approveHostRequest(user.uid, space.id);
-        this.feedbackMessage.set('Solicitud aprobada correctamente.');
+        this.toast.show('Solicitud aprobada correctamente.');
       } else {
         await this.adminService.rejectHostRequest(user.uid, space.id, this.rejectionReason());
-        this.feedbackMessage.set('Solicitud rechazada correctamente.');
+        this.toast.show('Solicitud rechazada correctamente.');
       }
 
       this.selectedUser.set(null);
@@ -154,7 +155,7 @@ selectedSpaceResource = rxResource({
       this.requestsResource.reload();
     } catch (error) {
       console.error('Host request action error:', error);
-      this.feedbackMessage.set('Error al procesar la solicitud.');
+      this.toast.show('Error al procesar la solicitud.');
     } finally {
       this.processing.set(false);
     }

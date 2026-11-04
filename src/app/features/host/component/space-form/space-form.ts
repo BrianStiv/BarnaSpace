@@ -8,11 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { AddressInput } from '../address-input/address-input';
 import { ImageUrlInput } from '../image-url-input/image-url-input';
 import { SpaceModel } from '../../../../core/models/space.model';
-import { SpaceCategory, SPACE_CATEGORIES } from '../../../../core/models/space-category.model';
+import { SPACE_CATEGORY_CARDS } from '../../../../core/models/space-category.model';
 import { AMENITIES } from '../../../../core/models/amenity.model';
 import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';
 import { GeocodingService } from '../../../../core/services/geocoding.service';
-
+import { MatIcon } from '@angular/material/icon';
+import { AMENITY_ICONS, Amenity } from '../../../../core/models/amenity.model';
 
 @Component({
   selector: 'app-space-form',
@@ -25,6 +26,7 @@ import { GeocodingService } from '../../../../core/services/geocoding.service';
     AddressInput,
     ImageUrlInput,
     DynamicField,
+    MatIcon
   ],
   templateUrl: './space-form.html',
 })
@@ -37,7 +39,7 @@ export class SpaceForm {
   initialData = input<Partial<SpaceModel> | null>(null);
   submitLabel = input<string>('Publicar espacio');
 
-  categories = SPACE_CATEGORIES;
+  categories = SPACE_CATEGORY_CARDS;
   amenities = AMENITIES;
 
   simpleFields: DynamicFieldConfig[] = [
@@ -147,5 +149,13 @@ export class SpaceForm {
     };
 
     this.spaceSubmit.emit(spaceData);
+  }
+
+  amenityIcon(amenity: string) {
+    return AMENITY_ICONS[amenity as Amenity] ?? { icon: 'check_circle', label: amenity };
+  }
+
+  categoryLabel(category: { id: string; label: string; image: string }): string {
+    return category.label;
   }
 }

@@ -5,10 +5,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { RegisterRequest } from '../../../../core/models/auth.model';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register-form',
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatFormFieldModule, MatButtonModule,MatIcon],
   templateUrl: './register-form.html',
 })
 export class RegisterForm {

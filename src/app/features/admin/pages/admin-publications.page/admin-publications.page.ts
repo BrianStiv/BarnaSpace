@@ -14,6 +14,10 @@ import { AdminTable, AdminTableColumn } from '../../component/admin-table/admin-
 import { AdminDetailPanel, DetailSection } from '../../component/admin-detail-panel/admin-detail-panel';
 import { AdminService } from '../../service/admin.service';
 import { SpaceModel, PublicationStatus } from '../../../../core/models/space.model';
+import { ToastService } from '../../../../core/services/toast.service';
+import { SPACE_CATEGORY_CARDS } from '../../../../core/models/space-category.model';
+import { AMENITY_ICONS, Amenity } from '../../../../core/models/amenity.model';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
@@ -29,11 +33,13 @@ import { SpaceModel, PublicationStatus } from '../../../../core/models/space.mod
     MatProgressSpinnerModule,
     AdminTable,
     AdminDetailPanel,
+    MatIcon
   ],
   templateUrl: './admin-publications.page.html',
 })
 export class AdminPublicationsPage {
   private adminService = inject(AdminService);
+  private toast = inject(ToastService);
 
   tabStatuses: PublicationStatus[] = ['pending_approval', 'published', 'rejected', 'deactivated'];
 
@@ -47,7 +53,6 @@ export class AdminPublicationsPage {
   selectedSpace = signal<SpaceModel | null>(null);
   rejectionReason = signal('');
   processing = signal(false);
-  feedbackMessage = signal<string | null>(null);
 
   publicationColumns: AdminTableColumn<SpaceModel>[] = [
     { key: 'name', label: 'Nombre' },
@@ -74,8 +79,8 @@ export class AdminPublicationsPage {
           { label: 'Capacidad', value: `${space.capacity} personas` },
           { label: 'Metros cuadrados', value: `${space.squareMeters} m²` },
           { label: 'Precio por día', value: `${space.dailyPrice} €` },
-          { label: 'Categorías', value: space.categories, type: 'list' },
-          { label: 'Servicios', value: space.amenities, type: 'list' },
+          { label: 'Categorías', value: space.categories.map(c => this.categoryItem(c)), type: 'icon-list' },
+          { label: 'Servicios', value: space.amenities.map(a => this.amenityItem(a)), type: 'icon-list' },
           { label: 'Estado', value: space.publicationStatus },
           { label: 'Motivo de rechazo', value: space.rejectionReason ?? '—' },
         ],
@@ -86,12 +91,20 @@ export class AdminPublicationsPage {
   onTabChange(status: PublicationStatus) {
     this.activeStatus.set(status);
     this.selectedSpace.set(null);
-    this.feedbackMessage.set(null);
   }
 
   onRowSelect(space: SpaceModel) {
     this.selectedSpace.set(space);
-    this.feedbackMessage.set(null);
+  }
+
+  categoryItem(id: string) {
+    const card = SPACE_CATEGORY_CARDS.find(c => c.id === id);
+    return { icon: 'category', label: card?.label ?? id };
+  }
+
+  amenityItem(id: string) {
+    const info = AMENITY_ICONS[id as Amenity];
+    return { icon: info?.icon ?? 'check_circle', label: info?.label ?? id };
   }
 
   private async handleAction(action: 'approve' | 'reject' | 'deactivate') {
@@ -99,18 +112,17 @@ export class AdminPublicationsPage {
     if (!space?.id) return;
 
     this.processing.set(true);
-    this.feedbackMessage.set(null);
 
     try {
       if (action === 'approve') {
         await this.adminService.approvePublication(space.id);
-        this.feedbackMessage.set('Publicación aprobada correctamente.');
+        this.toast.show('Publicación aprobada correctamente.');
       } else if (action === 'reject') {
         await this.adminService.rejectPublication(space.id, this.rejectionReason());
-        this.feedbackMessage.set('Publicación rechazada correctamente.');
+        this.toast.show('Publicación rechazada correctamente.');
       } else {
         await this.adminService.deactivatePublication(space.id);
-        this.feedbackMessage.set('Publicación desactivada correctamente.');
+        this.toast.show('Publicación desactivada correctamente.');
       }
 
       this.selectedSpace.set(null);
@@ -118,7 +130,7 @@ export class AdminPublicationsPage {
       this.publicationsResource.reload();
     } catch (error) {
       console.error('Publication action error:', error);
-      this.feedbackMessage.set('Error al procesar la publicación.');
+      this.toast.show('Error al procesar la publicación.');
     } finally {
       this.processing.set(false);
     }

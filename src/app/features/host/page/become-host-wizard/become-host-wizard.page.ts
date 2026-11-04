@@ -11,6 +11,8 @@ import { SpacesService } from '../../../../core/services/spaces.service';
 import { SpaceModel } from '../../../../core/models/space.model';
 import { DynamicField, DynamicFieldConfig } from '../../../../shared/components/dynamic-field/dynamic-field';
 import { HostService } from '../../../../core/services/host.service';
+import { ToastService } from '../../../../core/services/toast.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-become-host-wizard',
@@ -24,6 +26,7 @@ import { HostService } from '../../../../core/services/host.service';
     MatButtonModule,
     SpaceForm,
     DynamicField,
+    MatIcon
   ],
   templateUrl: './become-host-wizard.page.html',
 })
@@ -32,6 +35,7 @@ export class BecomeHostWizard {
   private router = inject(Router);
   private spacesService = inject(SpacesService);
   private hostService = inject(HostService);
+  private toast = inject(ToastService);
 
   currentStep = 0;
 
@@ -93,7 +97,7 @@ export class BecomeHostWizard {
     }
   }
 
-  async onSpaceSubmit(spaceData: Omit<SpaceModel, 'id'>) {
+    async onSpaceSubmit(spaceData: Omit<SpaceModel, 'id'>) {
     try {
       const uid = await this.hostService.applyForHost({
         firstName: this.personalForm.value.firstName,
@@ -116,9 +120,11 @@ export class BecomeHostWizard {
       });
 
       await this.spacesService.create({ ...spaceData, hostId: uid });
+      this.toast.show('Solicitud enviada. Queda pendiente de aprobación.', 'success');
       this.router.navigate(['/marketplace']);
     } catch (error) {
       console.error('Become host error:', error);
+      this.toast.show('Error al enviar la solicitud.', 'error');
     }
   }
 

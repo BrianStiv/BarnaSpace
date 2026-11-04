@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Firestore } from '@angular/fire/firestore';
+import { of } from 'rxjs';
 import { SpacesService } from './spaces.service';
 
 const mocks = vi.hoisted(() => ({
@@ -37,6 +38,7 @@ describe('SpacesService', () => {
     mocks.doc.mockImplementation((_fs: unknown, path: string, id: string) => ({ collection: path, id }));
     mocks.addDoc.mockResolvedValue(undefined as any);
     mocks.updateDoc.mockResolvedValue(undefined as any);
+    mocks.collectionData.mockReturnValue(of([]));
 
     TestBed.configureTestingModule({
       providers: [SpacesService, { provide: Firestore, useValue: {} }],

@@ -1,6 +1,7 @@
 import { Component, input, output, computed } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIcon } from '@angular/material/icon';
 
 export interface AdminTableColumn<T> {
   key: keyof T;
@@ -11,7 +12,7 @@ export interface AdminTableColumn<T> {
 @Component({
   selector: 'app-admin-table',
   standalone: true,
-  imports: [MatTableModule, MatProgressSpinnerModule],
+  imports: [MatTableModule, MatProgressSpinnerModule,MatIcon],
   templateUrl: './admin-table.html',
 })
 export class AdminTable<T extends Record<string, any>> {
